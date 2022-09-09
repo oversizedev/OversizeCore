@@ -15,13 +15,13 @@ public extension String {
 
     var isEmail: Bool {
         let regEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}"
-        let predicate = NSPredicate(format: "SELF MATCHES %@", regEx)
+        let predicate: NSPredicate = .init(format: "SELF MATCHES %@", regEx)
         return predicate.evaluate(with: self)
     }
 
     var isAlphabet: Bool {
         let regEx = "[A-Za-z_]*"
-        let predicate = NSPredicate(format: "SELF MATCHES %@", regEx)
+        let predicate: NSPredicate = .init(format: "SELF MATCHES %@", regEx)
         return predicate.evaluate(with: self)
     }
 
@@ -45,7 +45,7 @@ public extension String {
     }
 
     var localizedDecimalSeparator: String {
-        let nf = NumberFormatter()
+        let nf: NumberFormatter = .init()
         if let separator = nf.decimalSeparator {
             var safeValue = self
             if separator == "," {
@@ -151,7 +151,7 @@ public extension String {
         }
 
 //        func height(width: CGFloat, withFont font: UIFont) -> CGFloat {
-//            let constraintRect = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
+//            let constraintRect: CGSize = .init(width: width, height: CGFloat.greatestFiniteMagnitude)
 //            let boundingBox = boundingRect(with: constraintRect, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
 //            return ceil(boundingBox.height) + 1
 //        }
@@ -159,7 +159,7 @@ public extension String {
 
     public extension NSAttributedString {
         func height(width: CGFloat) -> CGFloat {
-            let constraintRect = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
+            let constraintRect: CGSize = .init(width: width, height: CGFloat.greatestFiniteMagnitude)
             let boundingBox = boundingRect(with: constraintRect, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
             return ceil(boundingBox.height) + 1
         }
