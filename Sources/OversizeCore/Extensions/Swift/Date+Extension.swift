@@ -16,6 +16,10 @@ public extension Date {
         Calendar.current.date(byAdding: .day, value: 1, to: noon)!
     }
 
+    var weekAfter: Date {
+        Calendar.current.date(byAdding: .day, value: 7, to: noon)!
+    }
+
     var noon: Date {
         Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self)!
     }
@@ -26,5 +30,17 @@ public extension Date {
 
     var isLastDayOfMonth: Bool {
         dayAfter.month != month
+    }
+}
+
+extension Date: RawRepresentable {
+    private static let formatter: ISO8601DateFormatter = .init()
+
+    public var rawValue: String {
+        Date.formatter.string(from: self)
+    }
+
+    public init?(rawValue: String) {
+        self = Date.formatter.date(from: rawValue) ?? Date()
     }
 }

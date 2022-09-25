@@ -48,6 +48,12 @@ public extension Double {
     }
 }
 
+public extension Double {
+    var toStringOnePoint: String {
+        String(format: "%.1f", self)
+    }
+}
+
 public extension Float {
     var toString: String {
         String(self)
