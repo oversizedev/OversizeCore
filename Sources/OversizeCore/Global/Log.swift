@@ -1,8 +1,6 @@
 //
-//  File.swift
-//
-//
-//  Created by aromanov on 05.09.2022.
+// Copyright © 2022 Alexander Romanov
+// Log.swift
 //
 
 import Foundation
@@ -15,7 +13,7 @@ public func log(_ objects: Any...) {
 
 public func log(_ object: Any?) {
     #if DEBUG
-        if let object = object {
+        if let object {
             log("⚪️ \(object)")
         } else {
             log("⚪️ \(String(describing: object))")

@@ -1,8 +1,6 @@
 //
-//  File.swift
-//
-//
-//  Created by aromanov on 04.09.2022.
+// Copyright © 2022 Alexander Romanov
+// Decimal+Extension.swift
 //
 
 import Foundation

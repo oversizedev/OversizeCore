@@ -5,7 +5,7 @@
 
 import Foundation
 
-public extension Optional where Wrapped == String {
+public extension String? {
     var valueOrEmpty: String {
         guard let unwrapped = self else {
             return ""
@@ -14,7 +14,7 @@ public extension Optional where Wrapped == String {
     }
 }
 
-public extension Optional where Wrapped == Bool {
+public extension Bool? {
     var valueOrFalse: Bool {
         guard let unwrapped = self else {
             return false

@@ -105,7 +105,7 @@ public extension Array where Element: Equatable {
     mutating func replace(object: Element, ifMissingInsertAt index: Int?) {
         if let currentIndex = remove(object) {
             insert(object, at: currentIndex)
-        } else if let index = index {
+        } else if let index {
             insert(object, at: index)
         } else {
             append(object)

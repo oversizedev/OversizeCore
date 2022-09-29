@@ -1,8 +1,6 @@
 //
-//  File.swift
-//
-//
-//  Created by aromanov on 02.09.2022.
+// Copyright © 2022 Alexander Romanov
+// View+Alignment.swift
 //
 
 import SwiftUI

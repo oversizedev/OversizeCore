@@ -1,3 +1,8 @@
+//
+// Copyright © 2022 Alexander Romanov
+// OversizeCoreTests.swift
+//
+
 @testable import OversizeCore
 import XCTest
 
