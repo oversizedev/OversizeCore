@@ -20,16 +20,40 @@ public extension Date {
         Calendar.current.date(byAdding: .day, value: 7, to: noon)!
     }
 
+    var hour: Date {
+        Calendar.current.date(bySettingHour: 1, minute: 0, second: 0, of: self)!
+    }
+
+    var year: Date {
+        Calendar.current.date(byAdding: .year, value: 1, to: self)!
+    }
+
+    var month: Date {
+        Calendar.current.date(byAdding: .month, value: 1, to: self)!
+    }
+
+    var halfHour: Date {
+        Calendar.current.date(bySettingHour: 0, minute: 30, second: 0, of: self)!
+    }
+
+    var monthBefore: Date {
+        Calendar.current.date(byAdding: .day, value: -30, to: noon)!
+    }
+
     var noon: Date {
         Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self)!
     }
 
-    var month: Int {
+    var monthNumber: Int {
         Calendar.current.component(.month, from: self)
     }
 
+    var dayNumber: Int {
+        Calendar.current.component(.day, from: self)
+    }
+
     var isLastDayOfMonth: Bool {
-        dayAfter.month != month
+        dayAfter.monthNumber != monthNumber
     }
 }
 
