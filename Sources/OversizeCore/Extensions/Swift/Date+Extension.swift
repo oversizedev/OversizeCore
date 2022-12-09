@@ -28,16 +28,32 @@ public extension Date {
         Calendar.current.date(byAdding: .year, value: 1, to: self)!
     }
 
+    var yearBefore: Date {
+        Calendar.current.date(byAdding: .year, value: -1, to: self)!
+    }
+
     var month: Date {
         Calendar.current.date(byAdding: .month, value: 1, to: self)!
     }
 
+    var minute: Date {
+        Calendar.current.date(byAdding: .minute, value: 1, to: self)!
+    }
+
     var halfHour: Date {
-        Calendar.current.date(bySettingHour: 0, minute: 30, second: 0, of: self)!
+        Calendar.current.date(byAdding: .minute, value: 30, to: self)!
     }
 
     var monthBefore: Date {
-        Calendar.current.date(byAdding: .day, value: -30, to: noon)!
+        Calendar.current.date(byAdding: .day, value: -30, to: self)!
+    }
+
+    var halfYarBefore: Date {
+        Calendar.current.date(byAdding: .month, value: -6, to: self)!
+    }
+
+    var quarterBefore: Date {
+        Calendar.current.date(byAdding: .month, value: -3, to: self)!
     }
 
     var noon: Date {
