@@ -6,6 +6,16 @@
 import Foundation
 
 public extension Date {
+    func startOfMonth() -> Date {
+        return Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: Calendar.current.startOfDay(for: self)))!
+    }
+    
+    func endOfMonth() -> Date {
+        return Calendar.current.date(byAdding: DateComponents(month: 1, day: -1), to: self.startOfMonth())!
+    }
+}
+
+public extension Date {
     static var yesterday: Date { Date().dayBefore }
     static var tomorrow: Date { Date().dayAfter }
     var dayBefore: Date {
@@ -118,5 +128,20 @@ extension Date: RawRepresentable {
 
     public init?(rawValue: String) {
         self = Date.formatter.date(from: rawValue) ?? Date()
+    }
+}
+
+extension Date {
+    
+    public func componentTitle(_ type: Calendar.Component)-> String {
+        let calendar = Calendar.current
+        let t = calendar.component(type, from: self)
+        return (t < 10 ? "0\(t)" : t.description)
+    }
+    
+    public func component(_ type: Calendar.Component)-> Int {
+        let calendar = Calendar.current
+        let t = calendar.component(type, from: self)
+        return t
     }
 }
