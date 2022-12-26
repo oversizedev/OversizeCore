@@ -16,4 +16,15 @@ public extension View {
             }
         }
     }
+
+    @_disfavoredOverload
+    func presentationDragIndicator(_ visibility: Visibility) -> some View {
+        Group {
+            if #available(iOS 16, *) {
+                self.presentationDragIndicator(visibility)
+            } else {
+                self
+            }
+        }
+    }
 }
