@@ -70,6 +70,10 @@ public extension Date {
         Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self)!
     }
 
+    var midnight: Date {
+        Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: self)!
+    }
+
     var monthNumber: Int {
         Calendar.current.component(.month, from: self)
     }
