@@ -14,6 +14,24 @@ public extension String? {
     }
 }
 
+public extension Date? {
+    var valueOrEmpty: Date {
+        guard let unwrapped = self else {
+            return Date()
+        }
+        return unwrapped
+    }
+}
+
+public extension Float? {
+    var valueOrEmpty: Float {
+        guard let unwrapped = self else {
+            return .zero
+        }
+        return unwrapped
+    }
+}
+
 public extension Bool? {
     var valueOrFalse: Bool {
         guard let unwrapped = self else {

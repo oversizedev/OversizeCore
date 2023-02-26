@@ -148,3 +148,19 @@ public extension Date {
         return t
     }
 }
+
+public extension Date {
+    var displayTodayLabelOrDate: String {
+        if Calendar.current.isDateInToday(self) {
+            return "Today"
+        } else if Calendar.current.isDateInTomorrow(self) {
+            return "Tomorrow"
+        } else if Calendar.current.isDateInYesterday(self) {
+            return "Yesterday"
+        } else if Calendar.current.component(.year, from: self) == Calendar.current.component(.year, from: Date()) {
+            return "\(formatted(.dateTime.day().month(.wide)))"
+        } else {
+            return "\(formatted(.dateTime.day().month(.wide).year()))"
+        }
+    }
+}
