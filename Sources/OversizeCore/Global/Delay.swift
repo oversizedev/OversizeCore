@@ -6,6 +6,5 @@
 import Foundation
 
 public func delay(time: TimeInterval, execute: @escaping () -> Void) {
-    DispatchQueue.main.asyncAfter(deadline: .now() + time,
-                                  execute: execute)
+    DispatchQueue.main.asyncAfter(deadline: .now() + time, execute: execute)
 }
