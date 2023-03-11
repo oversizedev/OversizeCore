@@ -32,6 +32,15 @@ public extension Float? {
     }
 }
 
+public extension Double? {
+    var valueOrEmpty: Double {
+        guard let unwrapped = self else {
+            return .zero
+        }
+        return unwrapped
+    }
+}
+
 public extension Bool? {
     var valueOrFalse: Bool {
         guard let unwrapped = self else {

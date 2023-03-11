@@ -14,15 +14,27 @@ public extension String {
     }
 
     var isEmail: Bool {
-        let regEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}"
-        let predicate: NSPredicate = .init(format: "SELF MATCHES %@", regEx)
-        return predicate.evaluate(with: self)
+        get {
+            let regEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}"
+            let predicate: NSPredicate = .init(format: "SELF MATCHES %@", regEx)
+            return predicate.evaluate(with: self)
+        }
+    }
+    
+    var isURL: Bool {
+        get {
+            let regEx = "http[s]?://(([^/:.[:space:]]+(.[^/:.[:space:]]+)*)|([0-9](.[0-9]{3})))(:[0-9]+)?((/[^?#[:space:]]+)([^#[:space:]]+)?(#.+)?)?"
+            let predicate = NSPredicate(format: "SELF MATCHES %@", argumentArray: [regEx])
+            return predicate.evaluate(with: self)
+        }
     }
 
     var isAlphabet: Bool {
-        let regEx = "[A-Za-z_]*"
-        let predicate: NSPredicate = .init(format: "SELF MATCHES %@", regEx)
-        return predicate.evaluate(with: self)
+        get {
+            let regEx = "[A-Za-z_]*"
+            let predicate: NSPredicate = .init(format: "SELF MATCHES %@", regEx)
+            return predicate.evaluate(with: self)
+        }
     }
 
     var urlEncode: String {
@@ -32,17 +44,21 @@ public extension String {
     }
 
     var url: URL? {
-        var URLString = self
-        if URLString.hasPrefix("//") {
-            URLString = "http:" + URLString
-            if let URL = URL(string: URLString) {
+        get {
+            var URLString = self
+            if URLString.hasPrefix("//") {
+                URLString = "http:" + URLString
+                if let URL = URL(string: URLString) {
+                    return URL
+                }
+            } else if let URL = URL(string: URLString) {
                 return URL
             }
-        } else if let URL = URL(string: URLString) {
-            return URL
+            return nil
         }
-        return nil
     }
+    
+
 
     var localizedDecimalSeparator: String {
         let nf: NumberFormatter = .init()
