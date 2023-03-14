@@ -19,3 +19,4 @@ jobs:
           # with permissions to create releases in the other repo
           token: ${{ secrets.ACTIONS_TOKEN }}
         env:
+           GITHUB_REPOSITORY: oversizedev/OversizeCore
