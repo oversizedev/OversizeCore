@@ -19,7 +19,6 @@ jobs:
         
     - name: Generate Changelog
       run: echo "# Good things have arrived" > ${{ github.workspace }}-CHANGELOG.txt
-      
     - name: Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
@@ -29,5 +28,4 @@ jobs:
         # with permissions to create releases in the other repo
         token: ${{ secrets.ACTIONS_TOKEN }}
       env:
-        GITHUB_REPOSITORY: oversizedev/OversizeCore
-
+         GITHUB_REPOSITORY: oversizedev/OversizeCore
