@@ -17,6 +17,6 @@ jobs:
           body_path: ${{ github.workspace }}-CHANGELOG.txt
           # note you'll typically need to create a personal access token
           # with permissions to create releases in the other repo
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.ACTIONS_TOKEN }}
         env:
           GITHUB_REPOSITORY: oversizedev/OversizeCore
