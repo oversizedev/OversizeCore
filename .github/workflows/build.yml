@@ -1,0 +1,17 @@
+name: Build Example
+
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+    name: Swift Build
+    runs-on: macos-12
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: swift build
