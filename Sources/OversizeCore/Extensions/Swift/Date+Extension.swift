@@ -50,6 +50,10 @@ public extension Date {
         Calendar.current.date(byAdding: .minute, value: 1, to: self)!
     }
 
+    var minuteBefore: Date {
+        Calendar.current.date(byAdding: .minute, value: -1, to: self)!
+    }
+
     var halfHour: Date {
         Calendar.current.date(byAdding: .minute, value: 30, to: self)!
     }
@@ -163,4 +167,12 @@ public extension Date {
             return "\(formatted(.dateTime.day().month(.wide).year()))"
         }
     }
+}
+
+public extension DateFormatter {
+    static let monthAndYear: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.setLocalizedDateFormatFromTemplate("MMMM yyyy")
+        return formatter
+    }()
 }
