@@ -7,16 +7,16 @@ import Foundation
 
 public func log(_ objects: Any...) {
     #if DEBUG
-        log(objects.map { "\($0)" }.joined(separator: " "))
+        log(objects.map { "\($0)" }.joined(separator: ", "))
     #endif
 }
 
 public func log(_ object: Any?) {
     #if DEBUG
         if let object {
-            log("⚪️ \(object)")
+            log(object)
         } else {
-            log("⚪️ \(String(describing: object))")
+            log(String(describing: object))
         }
     #endif
 }
@@ -27,9 +27,10 @@ public func log(_ object: Any?) {
     #endif
 }
 
-public func logWithTime(_: String, terminator: String? = nil) {
+public func logWithTime(_ text: String, terminator: String? = nil) {
     #if DEBUG
-        let textWithTime: String = Date().formatted(.dateTime)
+        let textTime: String = Date().formatted(.dateTime)
+        let textWithTime = "\(textTime): \(text)"
         terminator == nil ? print(textWithTime) : print(textWithTime, terminator: terminator!)
     #endif
 }

@@ -175,12 +175,6 @@ extension String {
         func width(font: UIFont) -> CGFloat {
             size(font: font).width
         }
-
-//        func height(width: CGFloat, withFont font: UIFont) -> CGFloat {
-//            let constraintRect: CGSize = .init(width: width, height: CGFloat.greatestFiniteMagnitude)
-//            let boundingBox = boundingRect(with: constraintRect, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: [NSAttributedString.Key.font: font], context: nil)
-//            return ceil(boundingBox.height) + 1
-//        }
     }
 
     public extension NSAttributedString {
