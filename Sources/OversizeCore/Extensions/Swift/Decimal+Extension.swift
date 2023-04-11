@@ -12,7 +12,6 @@ public extension Decimal {
     ///   - scale: How many decimal places.
     ///   - roundingMode: How should number be rounded. Defaults to `.plain`.
     /// - Returns: The new rounded number.
-
     func rounded(_ scale: Int, roundingMode: RoundingMode = .plain) -> Decimal {
         var value = self
         var result: Decimal = 0
