@@ -143,7 +143,7 @@ public extension Date {
     func componentTitle(_ type: Calendar.Component) -> String {
         let calendar = Calendar.current
         let t = calendar.component(type, from: self)
-        return (t < 10 ? "0\(t)" : t.description)
+        return t < 10 ? "0\(t)" : t.description
     }
 
     func component(_ type: Calendar.Component) -> Int {
