@@ -29,3 +29,10 @@ public extension URL {
         return urlString + "..."
     }
 }
+
+public extension URL {
+    func fileExists() -> Bool {
+        let path = path.replacingOccurrences(of: "file://", with: "")
+        return FileManager.default.fileExists(atPath: path)
+    }
+}

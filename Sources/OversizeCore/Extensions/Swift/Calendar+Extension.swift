@@ -1,8 +1,7 @@
 //
 // Copyright © 2023 Aleksandr Romanov
 // Calendar+Extension.swift, created on 02.04.2023
-//  
-    
+//
 
 import Foundation
 
