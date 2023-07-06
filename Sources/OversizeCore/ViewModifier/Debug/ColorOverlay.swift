@@ -1,6 +1,6 @@
 //
 // Copyright © 2023 Alexander Romanov
-// File.swift, created on 24.05.2023
+// DebugOverlayModifier.swift, created on 24.05.2023
 //
 
 import SwiftUI

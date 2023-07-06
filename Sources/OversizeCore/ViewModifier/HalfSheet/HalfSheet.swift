@@ -4,15 +4,17 @@
 //
 
 import SwiftUI
-
-#if os(iOS)
+#if canImport(UIKit)
     import UIKit
+#endif
 
-    public enum Detents {
-        case large
-        case medium
-        case height(CGFloat)
+public enum Detents: Hashable {
+    case large
+    case medium
+    case height(CGFloat)
 
+    #if os(iOS)
+        @available(iOS 15, *)
         public var uiViewDetents: UISheetPresentationController.Detent {
             switch self {
             case .large:
@@ -35,8 +37,9 @@ import SwiftUI
                 return PresentationDetent.height(height)
             }
         }
-    }
-#endif
+    #endif
+}
+
 // swiftlint:disable line_length
 #if os(iOS)
 
