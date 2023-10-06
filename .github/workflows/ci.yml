@@ -1,4 +1,4 @@
-name: CI - Push
+name: CI
 
 on:
   push:
@@ -24,10 +24,4 @@ jobs:
      name: Bump version
      needs: tests
      uses: oversizedev/GithubWorkflows/.github/workflows/bump.yml@main
-     secrets: inherit
-
-  release:
-     name: Release
-     needs: bump
-     uses: oversizedev/GithubWorkflows/.github/workflows/release.yml@main
      secrets: inherit
