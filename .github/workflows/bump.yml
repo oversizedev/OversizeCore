@@ -10,6 +10,8 @@ jobs:
   build-swiftpm:
     name: Build SwiftPM
     uses: oversizedev/.github/workflows/build-swiftpm.yml@main
+    with:
+      packages: '["OversizeCore"]'
     secrets: inherit
     
   # tests:
