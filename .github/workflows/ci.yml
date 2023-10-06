@@ -1,0 +1,28 @@
+name: CI - Push
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+  
+jobs:
+    
+  build-swiftpm:
+    name: Build SwiftPM
+    uses: oversizedev/GithubWorkflows/.github/workflows/build-swiftpm.yml@main
+    with:
+      packages: '["OversizeCore"]'
+    secrets: inherit
+    
+   tests:
+     name: Test
+     needs: build-swiftpm
+     uses: versizedev/GithubWorkflows/.github/workflows/test.yml@main
+     secrets: inherit
+
+   bump:
+     name: Bump version
+     needs: tests
+     uses: oversizedev/GithubWorkflows/.github/workflows/bump.yml@main
+     secrets: inherit
+    
