@@ -14,13 +14,13 @@ jobs:
       packages: '["OversizeCore"]'
     secrets: inherit
     
-   tests:
+  tests:
      name: Test
      needs: build-swiftpm
      uses: versizedev/GithubWorkflows/.github/workflows/test.yml@main
      secrets: inherit
 
-   bump:
+  bump:
      name: Bump version
      needs: tests
      uses: oversizedev/GithubWorkflows/.github/workflows/bump.yml@main
