@@ -1,28 +1,26 @@
-name: Bump version
+name: CI - Push
+
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
+  workflow_dispatch:
+  
 jobs:
 
-  build:
-    name: Swift Build
-    runs-on: macos-12
-    steps:
-    - uses: actions/checkout@v2
-    - name: Build
-      run: swift build
-
-  tag:
-    name: Create tag
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: '0'
-
-    - name: Bump version and push tag
-      uses: anothrNick/github-tag-action@1.61.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
-        WITH_V: false
+  build-swiftpm:
+    name: Build SwiftPM
+    uses: oversizedev/.github/workflows/build-swiftpm.yml@main
+    secrets: inherit
+    
+  # tests:
+  #   name: Test
+  #   needs: build-swiftpm
+  #   uses: oversizedev/.github/workflows/test.yml@main
+  #   secrets: inherit
+    
+  # bump:
+  #   name: Bump version
+  #   needs: tests
+  #   uses: oversizedev/.github/workflows/bump.yml@main
+  #   secrets: inherit
+    
