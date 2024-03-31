@@ -30,6 +30,10 @@ public extension Date {
         Calendar.current.date(byAdding: .day, value: 7, to: noon)!
     }
 
+    var weekBefore: Date {
+        Calendar.current.date(byAdding: .day, value: -7, to: noon)!
+    }
+
     var hour: Date {
         Calendar.current.date(bySettingHour: 1, minute: 0, second: 0, of: self)!
     }
