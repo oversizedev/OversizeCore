@@ -6,7 +6,9 @@
 import Foundation
 
 extension SortOrder: @retroactive CaseIterable, @retroactive Identifiable {
-    public static var allCases: [SortOrder] = [.forward, .reverse]
+    public static var allCases: [SortOrder] {
+        [.forward, .reverse]
+    }
 
     public var title: String {
         switch self {

@@ -38,4 +38,10 @@
             return bitmapRepresentation.representation(using: .jpeg, properties: [:])
         }
     }
+
+    public extension NSImage {
+        var cgImage: CGImage? {
+            cgImage(forProposedRect: nil, context: nil, hints: nil)
+        }
+    }
 #endif

@@ -132,14 +132,14 @@ public extension Date {
 }
 
 extension Date: @retroactive RawRepresentable {
-    private static let formatter: ISO8601DateFormatter = .init()
-
     public var rawValue: String {
-        Date.formatter.string(from: self)
+        let formatter = ISO8601DateFormatter()
+        return formatter.string(from: self)
     }
 
     public init?(rawValue: String) {
-        self = Date.formatter.date(from: rawValue) ?? Date()
+        let formatter = ISO8601DateFormatter()
+        self = formatter.date(from: rawValue) ?? Date()
     }
 }
 

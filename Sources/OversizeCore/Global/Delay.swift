@@ -5,6 +5,6 @@
 
 import Foundation
 
-public func delay(time: TimeInterval, execute: @escaping () -> Void) {
+public func delay(time: TimeInterval, execute: @Sendable @escaping () -> Void) {
     DispatchQueue.main.asyncAfter(deadline: .now() + time, execute: execute)
 }

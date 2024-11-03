@@ -48,4 +48,11 @@ public extension Bool? {
         }
         return unwrapped
     }
+
+    var valueOrTrue: Bool {
+        guard let unwrapped = self else {
+            return true
+        }
+        return unwrapped
+    }
 }
