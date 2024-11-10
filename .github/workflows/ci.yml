@@ -2,7 +2,8 @@ name: CI
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - '**'
   workflow_dispatch:
   
 jobs:
@@ -21,7 +22,8 @@ jobs:
      secrets: inherit
 
   bump:
-     name: Bump version
-     needs: tests
-     uses: oversizedev/GithubWorkflows/.github/workflows/bump.yml@main
-     secrets: inherit
+    name: Bump version
+    needs: tests
+    if: github.ref == 'refs/heads/main'
+    uses: oversizedev/GithubWorkflows/.github/workflows/bump.yml@main
+    secrets: inherit
