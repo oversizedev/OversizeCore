@@ -7,7 +7,7 @@
     import UIKit
 #endif
 
-#if canImport(UIKit)
+#if canImport(UIKit) && !os(watchOS)
     public extension UIImage {
         var averageColor: UIColor? {
             guard let inputImage = CIImage(image: self) else { return nil }
