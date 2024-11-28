@@ -143,6 +143,16 @@ extension Array: @retroactive RawRepresentable where Element: Codable {
     }
 }
 
+public extension Array {
+    func element(_ index: Int) -> Element? {
+        if index >= 0, index < count {
+            self[index]
+        } else {
+            nil
+        }
+    }
+}
+
 public extension BidirectionalCollection where Iterator.Element: Equatable {
     func after(_ item: Iterator.Element, loop: Bool = false) -> Element? {
         if let itemIndex = firstIndex(of: item) {
@@ -170,5 +180,11 @@ public extension BidirectionalCollection where Iterator.Element: Equatable {
             }
         }
         return nil
+    }
+}
+
+public extension Array {
+    func compacted<T>() -> [T] where Element == T? {
+        compactMap { $0 }
     }
 }
