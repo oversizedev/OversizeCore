@@ -160,15 +160,15 @@ public extension Date {
 public extension Date {
     var displayTodayLabelOrDate: String {
         if Calendar.current.isDateInToday(self) {
-            return "Today"
+            "Today"
         } else if Calendar.current.isDateInTomorrow(self) {
-            return "Tomorrow"
+            "Tomorrow"
         } else if Calendar.current.isDateInYesterday(self) {
-            return "Yesterday"
+            "Yesterday"
         } else if Calendar.current.component(.year, from: self) == Calendar.current.component(.year, from: Date()) {
-            return "\(formatted(.dateTime.day().month(.wide)))"
+            "\(formatted(.dateTime.day().month(.wide)))"
         } else {
-            return "\(formatted(.dateTime.day().month(.wide).year()))"
+            "\(formatted(.dateTime.day().month(.wide).year()))"
         }
     }
 }

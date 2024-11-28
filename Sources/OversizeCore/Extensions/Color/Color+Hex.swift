@@ -5,9 +5,9 @@
 
 import SwiftUI
 #if canImport(UIKit)
-    import UIKit
+import UIKit
 #elseif canImport(AppKit)
-    import AppKit
+import AppKit
 #endif
 
 public typealias ColorComponentsRGBA = (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
@@ -76,9 +76,9 @@ public extension Color {
 
     var rgba: ColorComponentsRGBA {
         #if canImport(AppKit)
-            let color = NSColor(self).usingColorSpace(.displayP3)!
+        let color = NSColor(self).usingColorSpace(.displayP3)!
         #elseif canImport(UIKit)
-            let color: UIColor = .init(self)
+        let color: UIColor = .init(self)
         #endif
 
         var t = (CGFloat(), CGFloat(), CGFloat(), CGFloat())

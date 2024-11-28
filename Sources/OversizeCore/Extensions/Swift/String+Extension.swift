@@ -137,52 +137,52 @@ extension String {
 
 #if os(iOS) || os(tvOS) || os(watchOS)
 
-    extension String {
-        func getAttributedStringFromHtml(font: UIFont, color: UIColor) -> NSAttributedString? {
-            guard let data = data(using: String.Encoding.utf16, allowLossyConversion: false) else {
-                return nil
-            }
-
-            guard let attributedString = try? NSMutableAttributedString(
-                data: data,
-                options: [
-                    .documentType: NSAttributedString.DocumentType.html,
-                    .characterEncoding: String.Encoding.utf8.rawValue,
-                ],
-                documentAttributes: nil
-            ) else {
-                return nil
-            }
-
-            attributedString.addAttributes(
-                [
-                    .font: font,
-                    .foregroundColor: color,
-                ],
-                range: NSRange(location: 0, length: attributedString.length)
-            )
-
-            return attributedString
+extension String {
+    func getAttributedStringFromHtml(font: UIFont, color: UIColor) -> NSAttributedString? {
+        guard let data = data(using: String.Encoding.utf16, allowLossyConversion: false) else {
+            return nil
         }
+
+        guard let attributedString = try? NSMutableAttributedString(
+            data: data,
+            options: [
+                .documentType: NSAttributedString.DocumentType.html,
+                .characterEncoding: String.Encoding.utf8.rawValue,
+            ],
+            documentAttributes: nil
+        ) else {
+            return nil
+        }
+
+        attributedString.addAttributes(
+            [
+                .font: font,
+                .foregroundColor: color,
+            ],
+            range: NSRange(location: 0, length: attributedString.length)
+        )
+
+        return attributedString
+    }
+}
+
+public extension String {
+    func size(font: UIFont) -> CGSize {
+        let originalString = self as NSString
+        return originalString.size(withAttributes: [NSAttributedString.Key.font: font])
     }
 
-    public extension String {
-        func size(font: UIFont) -> CGSize {
-            let originalString = self as NSString
-            return originalString.size(withAttributes: [NSAttributedString.Key.font: font])
-        }
-
-        func width(font: UIFont) -> CGFloat {
-            size(font: font).width
-        }
+    func width(font: UIFont) -> CGFloat {
+        size(font: font).width
     }
+}
 
-    public extension NSAttributedString {
-        func height(width: CGFloat) -> CGFloat {
-            let constraintRect: CGSize = .init(width: width, height: CGFloat.greatestFiniteMagnitude)
-            let boundingBox = boundingRect(with: constraintRect, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
-            return ceil(boundingBox.height) + 1
-        }
+public extension NSAttributedString {
+    func height(width: CGFloat) -> CGFloat {
+        let constraintRect: CGSize = .init(width: width, height: CGFloat.greatestFiniteMagnitude)
+        let boundingBox = boundingRect(with: constraintRect, options: NSStringDrawingOptions.usesLineFragmentOrigin, context: nil)
+        return ceil(boundingBox.height) + 1
     }
+}
 
 #endif
