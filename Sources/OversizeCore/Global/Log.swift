@@ -47,6 +47,12 @@ public func logWithTime(_ text: String, terminator: String? = nil) {
     #endif
 }
 
+@inlinable public func logNetwork(_ text: String, terminator: String? = nil) {
+    #if DEBUG
+    terminator == nil ? print("🌎 [NETWORK] \(text)") : print("🛎️ [NETWORK] \(text)", terminator: terminator!)
+    #endif
+}
+
 @inlinable public func logInfo(_ text: String, terminator: String? = nil) {
     #if DEBUG
     terminator == nil ? print("ℹ️ [INFO] \(text)") : print("ℹ️ [INFO] \(text)", terminator: terminator!)
