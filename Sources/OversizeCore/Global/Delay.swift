@@ -8,3 +8,21 @@ import Foundation
 public func delay(time: TimeInterval, execute: @Sendable @escaping () -> Void) {
     DispatchQueue.main.asyncAfter(deadline: .now() + time, execute: execute)
 }
+
+@available(iOS 16.0, tvOS 16.0, watchOS 9.0, macOS 13.0, *)
+public func delay(_ time: ContinuousClock.Duration, action: @Sendable @escaping () async -> Void) async {
+    do {
+        try await Task.sleep(for: time)
+        await action()
+    } catch {}
+}
+
+@available(iOS 16.0, tvOS 16.0, watchOS 9.0, macOS 13.0, *)
+public func delay(_ time: ContinuousClock.Duration, action: @Sendable @escaping () -> Void) {
+    Task {
+        do {
+            try await Task.sleep(for: time)
+            action()
+        } catch {}
+    }
+}
