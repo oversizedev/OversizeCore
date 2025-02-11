@@ -11,6 +11,10 @@ public extension Locale.Currency {
         Locale.current.localizedString(forCurrencyCode: identifier)
     }
 
+    var dispalyIdentifier: String? {
+        identifier.uppercased()
+    }
+
     var dispalyLocalizedSymbol: String? {
         Locale.current.localizedCurrencySymbol(forCurrencyCode: identifier)
     }

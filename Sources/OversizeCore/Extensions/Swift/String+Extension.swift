@@ -92,6 +92,14 @@ public extension String {
 }
 
 public extension String {
+    func toDate(formatOptions: ISO8601DateFormatter.Options = .withFullDate) -> Date? {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = formatOptions
+        return formatter.date(from: self)
+    }
+}
+
+public extension String {
     func enumCase<T: RawRepresentable>() -> T? {
         if let raw = self as? T.RawValue {
             return T(rawValue: raw)

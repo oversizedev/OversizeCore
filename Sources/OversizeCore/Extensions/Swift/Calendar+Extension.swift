@@ -1,5 +1,5 @@
 //
-// Copyright © 2023 Aleksandr Romanov
+// Copyright © 2023 Alexander Romanov
 // Calendar+Extension.swift, created on 02.04.2023
 //
 
