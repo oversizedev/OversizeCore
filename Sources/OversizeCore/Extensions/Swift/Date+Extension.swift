@@ -180,3 +180,13 @@ public extension DateFormatter {
         return formatter
     }()
 }
+
+public extension Date {
+    func toString(format: String = "yyyy-MM-dd", timeZone: String = "UTC", locale: String = "en_US_POSIX") -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
+        formatter.timeZone = TimeZone(identifier: timeZone)
+        formatter.locale = Locale(identifier: locale)
+        return formatter.string(from: self)
+    }
+}
