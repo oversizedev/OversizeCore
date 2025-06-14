@@ -41,6 +41,12 @@ public func logWithTime(_ text: String, terminator: String? = nil) {
     #endif
 }
 
+@inlinable public func logUI(_ text: String, terminator: String? = nil) {
+    #if DEBUG
+    terminator == nil ? print("🖥️ [UI] \(text)") : print("⚪ [UI] \(text)", terminator: terminator!)
+    #endif
+}
+
 @inlinable public func logNotice(_ text: String, terminator: String? = nil) {
     #if DEBUG
     terminator == nil ? print("🛎️ [NOTICE] \(text)") : print("🛎️ [NOTICE] \(text)", terminator: terminator!)

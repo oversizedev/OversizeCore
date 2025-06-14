@@ -157,7 +157,7 @@ extension String {
                 .documentType: NSAttributedString.DocumentType.html,
                 .characterEncoding: String.Encoding.utf8.rawValue,
             ],
-            documentAttributes: nil
+            documentAttributes: nil,
         ) else {
             return nil
         }
@@ -167,7 +167,7 @@ extension String {
                 .font: font,
                 .foregroundColor: color,
             ],
-            range: NSRange(location: 0, length: attributedString.length)
+            range: NSRange(location: 0, length: attributedString.length),
         )
 
         return attributedString

@@ -18,7 +18,15 @@ public func delay(_ time: ContinuousClock.Duration, action: @Sendable @escaping 
 }
 
 @available(iOS 16.0, tvOS 16.0, watchOS 9.0, macOS 13.0, *)
-public func delay(_ time: ContinuousClock.Duration, action: @Sendable @escaping () -> Void) {
+public func delayMain(_ time: ContinuousClock.Duration, action: @MainActor @Sendable @escaping () async -> Void) async {
+    do {
+        try await Task.sleep(for: time)
+        await action()
+    } catch {}
+}
+
+@available(iOS 16.0, tvOS 16.0, watchOS 9.0, macOS 13.0, *)
+public func delayDetached(_ time: ContinuousClock.Duration, action: @Sendable @escaping () -> Void) {
     Task.detached {
         try await Task.sleep(for: time)
         action()

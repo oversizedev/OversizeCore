@@ -8,7 +8,7 @@ import Foundation
 public extension Calendar {
     func generateDates(
         inside interval: DateInterval,
-        matching components: DateComponents
+        matching components: DateComponents,
     ) -> [Date] {
         var dates: [Date] = []
         dates.append(interval.start)
@@ -16,7 +16,7 @@ public extension Calendar {
         enumerateDates(
             startingAfter: interval.start,
             matching: components,
-            matchingPolicy: .nextTime
+            matchingPolicy: .nextTime,
         ) { date, _, stop in
             if let date {
                 if date < interval.end {

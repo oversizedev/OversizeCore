@@ -35,7 +35,7 @@ public extension Color {
             red: Double(r) / 255,
             green: Double(g) / 255,
             blue: Double(b) / 255,
-            opacity: Double(a) / 255
+            opacity: Double(a) / 255,
         )
     }
 
@@ -61,7 +61,7 @@ public extension Color {
                 red: Double(r) / 255,
                 green: Double(g) / 255,
                 blue: Double(b) / 255,
-                opacity: Double(a) / 255
+                opacity: Double(a) / 255,
             )
         } else {
             self.init(red: 0, green: 0, blue: 0)

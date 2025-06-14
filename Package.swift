@@ -13,7 +13,7 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "OversizeCore", targets: ["OversizeCore"]
+            name: "OversizeCore", targets: ["OversizeCore"],
         ),
     ],
     dependencies: [
@@ -21,11 +21,11 @@ let package = Package(
     targets: [
         .target(
             name: "OversizeCore",
-            dependencies: []
+            dependencies: [],
         ),
         .testTarget(
             name: "OversizeCoreTests",
-            dependencies: ["OversizeCore"]
+            dependencies: ["OversizeCore"],
         ),
-    ]
+    ],
 )
