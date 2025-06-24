@@ -65,6 +65,12 @@ public func logWithTime(_ text: String, terminator: String? = nil) {
     #endif
 }
 
+@inlinable public func logSecurity(_ text: String, terminator: String? = nil) {
+    #if DEBUG
+    terminator == nil ? print("🔐 [SECURITY] \(text)") : print("ℹ️ [SECURITY] \(text)", terminator: terminator!)
+    #endif
+}
+
 @_disfavoredOverload
 @inlinable public func logSuccess(_ text: String, terminator: String? = nil) {
     #if DEBUG
