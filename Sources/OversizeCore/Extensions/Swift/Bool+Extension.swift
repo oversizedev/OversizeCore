@@ -30,8 +30,8 @@ public extension Bool {
         }
     }
 
-    static var iOS19: Bool {
-        if #available(iOS 19, *) {
+    static var iOS26: Bool {
+        if #available(iOS 26, *) {
             true
         } else {
             false
