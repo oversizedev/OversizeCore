@@ -1,6 +1,6 @@
 //
 // Copyright © 2023 Alexander Romanov
-// LocaleExtension.swift, created on 15.07.2023
+// Locale+Extension.swift, created on 15.07.2023
 //
 
 import Foundation
