@@ -91,14 +91,6 @@ await delay(.seconds(1)) {
 }
 ```
 
-## Documentation
-
-The package is fully documented with Apple-style documentation comments compatible with DocC. Generate documentation using:
-
-```bash
-swift package generate-documentation
-```
-
 ## Categories
 
 ### Swift Extensions
@@ -124,17 +116,6 @@ swift package generate-documentation
 - **Delay**: Modern async/await delay functions
 - **Map**: Location coordinate extensions
 
-## Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
-
-### Development Setup
-
-1. Clone the repository
-2. Open `Package.swift` in Xcode
-3. Run tests with `⌘+U`
-4. Build documentation with `swift package generate-documentation`
-
 ## Requirements
 
 - Swift 6.0+
@@ -145,9 +126,3 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 Copyright © 2022-2025 Alexander Romanov
 
 This project is available under the MIT License. See the LICENSE file for more details.
-
-## Support
-
-- 📖 [Documentation](https://oversizedev.github.io/OversizeCore)
-- 🐛 [Issue Tracker](https://github.com/oversizedev/OversizeCore/issues)
-- 💬 [Discussions](https://github.com/oversizedev/OversizeCore/discussions)
