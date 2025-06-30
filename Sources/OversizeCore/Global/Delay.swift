@@ -14,7 +14,9 @@ public func delay(_ time: ContinuousClock.Duration, action: @Sendable @escaping 
     do {
         try await Task.sleep(for: time)
         await action()
-    } catch {}
+    } catch {
+        logError("Delay function failed", error: error)
+    }
 }
 
 @available(iOS 16.0, tvOS 16.0, watchOS 9.0, macOS 13.0, *)
@@ -22,13 +24,19 @@ public func delayMain(_ time: ContinuousClock.Duration, action: @MainActor @Send
     do {
         try await Task.sleep(for: time)
         await action()
-    } catch {}
+    } catch {
+        logError("DelayMain function failed", error: error)
+    }
 }
 
 @available(iOS 16.0, tvOS 16.0, watchOS 9.0, macOS 13.0, *)
 public func delayDetached(_ time: ContinuousClock.Duration, action: @Sendable @escaping () -> Void) {
     Task.detached {
-        try await Task.sleep(for: time)
-        action()
+        do {
+            try await Task.sleep(for: time)
+            action()
+        } catch {
+            logError("DelayDetached function failed", error: error)
+        }
     }
 }

@@ -34,7 +34,7 @@ public extension String {
     var urlEncode: String {
         let originalString = self
         let escapedString = originalString.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
-        return escapedString!
+        return escapedString ?? originalString
     }
 
     var url: URL? {
@@ -83,7 +83,7 @@ public extension String {
     }
 
     var data: Data {
-        self.data(using: String.Encoding.utf8)!
+        self.data(using: String.Encoding.utf8) ?? Data()
     }
 
     var range: NSRange {
@@ -114,7 +114,9 @@ public extension String {
             return matches.map {
                 var array: [String] = []
                 for rangeIndex in 0 ... max(0, $0.numberOfRanges - 1) {
-                    array.append(String(self[Range($0.range(at: rangeIndex), in: self)!]))
+                    if let range = Range($0.range(at: rangeIndex), in: self) {
+                        array.append(String(self[range]))
+                    }
                 }
                 return array
             }
