@@ -66,7 +66,7 @@ public extension Date {
         Calendar.current.date(byAdding: .day, value: -30, to: self)!
     }
 
-    var halfYarBefore: Date {
+    var halfYearBefore: Date {
         Calendar.current.date(byAdding: .month, value: -6, to: self)!
     }
 
