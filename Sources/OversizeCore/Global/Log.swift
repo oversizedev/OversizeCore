@@ -103,6 +103,10 @@ public func logSuccess(_ text: String, object: Any?) {
     #endif
 }
 
+@inlinable public func logError(_ text: String, _ error: Error, terminator: String? = nil) {
+    logError(text, error: error, terminator: terminator)
+}
+
 @inlinable public func logError(_ text: String, error: String, terminator: String? = nil) {
     #if DEBUG
     terminator == nil ? print("🔴 [ERROR] \(text):\n\(error)") : print("🔴 [ERROR] \(text):\n\(error)", terminator: terminator!)

@@ -5,7 +5,7 @@
 
 import Foundation
 
-extension Bool {
+public extension Bool {
     static var iOS16: Bool {
         if #available(iOS 16, *) {
             true
@@ -24,6 +24,14 @@ extension Bool {
 
     static var iOS18: Bool {
         if #available(iOS 18, *) {
+            true
+        } else {
+            false
+        }
+    }
+
+    static var iOS26: Bool {
+        if #available(iOS 26, *) {
             true
         } else {
             false
