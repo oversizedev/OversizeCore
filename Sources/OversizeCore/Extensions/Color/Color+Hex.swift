@@ -10,10 +10,38 @@ import UIKit
 import AppKit
 #endif
 
+/// A type alias representing the RGBA color components as a tuple.
+/// 
+/// This type provides a convenient way to work with color components,
+/// containing red, green, blue, and alpha values as CGFloat from 0.0 to 1.0.
 public typealias ColorComponentsRGBA = (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
 
 // swiftlint:disable all
+
+// MARK: - Hex Color Initialization
+
 public extension Color {
+    /// Creates a Color from a hexadecimal string representation.
+    /// 
+    /// This initializer supports multiple hex color formats:
+    /// - 3-character RGB (e.g., "F0A" becomes "FF00AA")
+    /// - 6-character RGB (e.g., "FF00AA")
+    /// - 8-character ARGB (e.g., "80FF00AA" with alpha)
+    /// 
+    /// The initializer automatically strips non-alphanumeric characters,
+    /// so formats like "#FF00AA", "0xFF00AA", or "FF-00-AA" are all valid.
+    /// 
+    /// - Parameter hex: The hexadecimal color string
+    /// 
+    /// Example:
+    /// ```swift
+    /// let red = Color(hex: "FF0000")        // Pure red
+    /// let blue = Color(hex: "#0000FF")      // Pure blue with # prefix
+    /// let green = Color(hex: "0F0")         // Short form green
+    /// let transparent = Color(hex: "80FF0000") // Semi-transparent red
+    /// ```
+    /// 
+    /// - Note: Invalid hex strings default to black with zero opacity.
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         var int: UInt64 = 0
@@ -39,6 +67,22 @@ public extension Color {
         )
     }
 
+    /// Creates a Color from an optional hexadecimal string representation.
+    /// 
+    /// This initializer handles optional hex strings safely, providing the same
+    /// functionality as the non-optional version but with nil safety.
+    /// If the hex string is nil, it creates a black color.
+    /// 
+    /// - Parameter hex: The optional hexadecimal color string
+    /// 
+    /// Example:
+    /// ```swift
+    /// let userColor: String? = "#FF0000"
+    /// let safeColor = Color(hex: userColor)  // Red color
+    /// 
+    /// let nilColor: String? = nil
+    /// let defaultColor = Color(hex: nilColor) // Black color
+    /// ```
     init(hex: String?) {
         if let hex {
             let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
@@ -69,11 +113,42 @@ public extension Color {
     }
 }
 
+// MARK: - Hex String Generation
+
 public extension Color {
+    /// Converts the color to its hexadecimal string representation.
+    /// 
+    /// This function generates a hex string from the color, automatically choosing
+    /// between 6-character RGB format (when alpha is 1.0) or 8-character RGBA format
+    /// (when alpha is not 1.0).
+    /// 
+    /// - Returns: A hex string representation of the color with # prefix
+    /// 
+    /// Example:
+    /// ```swift
+    /// let red = Color.red
+    /// let hex = red.hexString() // "#FF0000"
+    /// 
+    /// let transparentBlue = Color.blue.opacity(0.5)
+    /// let hexWithAlpha = transparentBlue.hexString() // "#0000FF80"
+    /// ```
     func hexString() -> String {
         hexStringFromColorComponents(rgba)
     }
 
+    /// Extracts the RGBA components of the color as a tuple.
+    /// 
+    /// This computed property breaks down the color into its red, green, blue, and alpha
+    /// components using the platform's native color representation (UIColor or NSColor).
+    /// 
+    /// - Returns: A ColorComponentsRGBA tuple with values from 0.0 to 1.0
+    /// 
+    /// Example:
+    /// ```swift
+    /// let purple = Color.purple
+    /// let components = purple.rgba
+    /// print("Red: \(components.red), Alpha: \(components.alpha)")
+    /// ```
     var rgba: ColorComponentsRGBA {
         #if canImport(AppKit)
         let color = NSColor(self).usingColorSpace(.displayP3)!
@@ -87,6 +162,22 @@ public extension Color {
     }
 }
 
+// MARK: - Hex Conversion Utilities
+
+/// Converts color components to a hexadecimal string representation.
+/// 
+/// This function creates a hex string from RGBA color components, automatically
+/// choosing the appropriate format based on the alpha value. If alpha is 1.0,
+/// it returns a 6-character RGB hex string, otherwise an 8-character RGBA hex string.
+/// 
+/// - Parameter components: The RGBA color components tuple
+/// - Returns: A hex string with # prefix in RGB or RGBA format
+/// 
+/// Example:
+/// ```swift
+/// let components: ColorComponentsRGBA = (red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
+/// let hex = hexStringFromColorComponents(components) // "#FF0000"
+/// ```
 public func hexStringFromColorComponents(_ components: ColorComponentsRGBA) -> String {
     // print("hexStringFromColorComponents → \(components)")
 
