@@ -16,8 +16,6 @@ let package = Package(
             name: "OversizeCore", targets: ["OversizeCore"],
         ),
     ],
-    dependencies: [
-    ],
     targets: [
         .target(
             name: "OversizeCore",

@@ -8,12 +8,12 @@ import Foundation
 // MARK: - Basic Logging Functions
 
 /// Logs multiple objects to the console in debug builds.
-/// 
+///
 /// This function takes multiple objects and logs them as a comma-separated string.
 /// Logging only occurs in debug builds (when DEBUG is defined).
-/// 
+///
 /// - Parameter objects: Multiple objects to log
-/// 
+///
 /// Example:
 /// ```swift
 /// log("User:", user.name, "Score:", score)
@@ -26,17 +26,17 @@ public func log(_ objects: Any...) {
 }
 
 /// Logs an optional object to the console in debug builds.
-/// 
+///
 /// This function safely logs an optional value, handling nil cases gracefully.
 /// Logging only occurs in debug builds (when DEBUG is defined).
-/// 
+///
 /// - Parameter object: Optional object to log
-/// 
+///
 /// Example:
 /// ```swift
 /// let optionalValue: String? = "Hello"
 /// log(optionalValue) // Output: Hello
-/// 
+///
 /// let nilValue: String? = nil
 /// log(nilValue) // Output: nil
 /// ```
@@ -51,14 +51,14 @@ public func log(_ object: Any?) {
 }
 
 /// Logs a string to the console with optional terminator in debug builds.
-/// 
+///
 /// This is the base logging function that outputs text to the console.
 /// Logging only occurs in debug builds (when DEBUG is defined).
-/// 
+///
 /// - Parameters:
 ///   - text: The text to log
 ///   - terminator: Optional terminator string. If nil, uses default newline
-/// 
+///
 /// Example:
 /// ```swift
 /// log("Hello World")
@@ -73,14 +73,14 @@ public func log(_ object: Any?) {
 // MARK: - Timestamped Logging
 
 /// Logs a string with timestamp prefix in debug builds.
-/// 
+///
 /// This function adds a timestamp prefix to the log message, useful for tracking
 /// when events occur during debugging. Logging only occurs in debug builds.
-/// 
+///
 /// - Parameters:
 ///   - text: The text to log
 ///   - terminator: Optional terminator string. If nil, uses default newline
-/// 
+///
 /// Example:
 /// ```swift
 /// logWithTime("Application started")
@@ -97,14 +97,14 @@ public func logWithTime(_ text: String, terminator: String? = nil) {
 // MARK: - Categorized Logging Functions
 
 /// Logs a debug message with debug category prefix in debug builds.
-/// 
+///
 /// This function is used for general debugging information that helps track
 /// application flow and state during development.
-/// 
+///
 /// - Parameters:
 ///   - text: The debug message to log
 ///   - terminator: Optional terminator string. If nil, uses default newline
-/// 
+///
 /// Example:
 /// ```swift
 /// logDebug("User preferences loaded")
@@ -117,14 +117,14 @@ public func logWithTime(_ text: String, terminator: String? = nil) {
 }
 
 /// Logs a UI-related message with UI category prefix in debug builds.
-/// 
+///
 /// This function is used for logging user interface updates, view lifecycle events,
 /// and other UI-related debugging information.
-/// 
+///
 /// - Parameters:
 ///   - text: The UI message to log
 ///   - terminator: Optional terminator string. If nil, uses default newline
-/// 
+///
 /// Example:
 /// ```swift
 /// logUI("View did appear")
@@ -137,14 +137,14 @@ public func logWithTime(_ text: String, terminator: String? = nil) {
 }
 
 /// Logs a notice message with notice category prefix in debug builds.
-/// 
+///
 /// This function is used for important notices that require attention but
 /// are not errors or warnings.
-/// 
+///
 /// - Parameters:
 ///   - text: The notice message to log
 ///   - terminator: Optional terminator string. If nil, uses default newline
-/// 
+///
 /// Example:
 /// ```swift
 /// logNotice("Cache cleared successfully")
@@ -157,14 +157,14 @@ public func logWithTime(_ text: String, terminator: String? = nil) {
 }
 
 /// Logs a network-related message with network category prefix in debug builds.
-/// 
+///
 /// This function is used for logging network requests, responses, and
 /// connectivity-related debugging information.
-/// 
+///
 /// - Parameters:
 ///   - text: The network message to log
 ///   - terminator: Optional terminator string. If nil, uses default newline
-/// 
+///
 /// Example:
 /// ```swift
 /// logNetwork("API request completed")
@@ -177,14 +177,14 @@ public func logWithTime(_ text: String, terminator: String? = nil) {
 }
 
 /// Logs an informational message with info category prefix in debug builds.
-/// 
+///
 /// This function is used for general informational messages that provide
 /// context about application state and operations.
-/// 
+///
 /// - Parameters:
 ///   - text: The informational message to log
 ///   - terminator: Optional terminator string. If nil, uses default newline
-/// 
+///
 /// Example:
 /// ```swift
 /// logInfo("Database connection established")
@@ -197,14 +197,14 @@ public func logWithTime(_ text: String, terminator: String? = nil) {
 }
 
 /// Logs a security-related message with security category prefix in debug builds.
-/// 
+///
 /// This function is used for logging security-related events, authentication
 /// attempts, and other security-sensitive debugging information.
-/// 
+///
 /// - Parameters:
 ///   - text: The security message to log
 ///   - terminator: Optional terminator string. If nil, uses default newline
-/// 
+///
 /// Example:
 /// ```swift
 /// logSecurity("User authenticated successfully")
@@ -219,14 +219,14 @@ public func logWithTime(_ text: String, terminator: String? = nil) {
 // MARK: - Success Logging
 
 /// Logs a success message with success category prefix in debug builds.
-/// 
+///
 /// This function is used for logging successful operations and positive outcomes.
 /// This overload is marked as disfavored to encourage using the more specific variant.
-/// 
+///
 /// - Parameters:
 ///   - text: The success message to log
 ///   - terminator: Optional terminator string. If nil, uses default newline
-/// 
+///
 /// Example:
 /// ```swift
 /// logSuccess("Data saved successfully")
@@ -240,14 +240,14 @@ public func logWithTime(_ text: String, terminator: String? = nil) {
 }
 
 /// Logs a success message with an associated object in debug builds.
-/// 
+///
 /// This function logs a success message followed by the string representation
 /// of the provided object, useful for debugging successful operations with data.
-/// 
+///
 /// - Parameters:
 ///   - text: The success message to log
 ///   - object: The object to log along with the success message
-/// 
+///
 /// Example:
 /// ```swift
 /// logSuccess("User created", object: user)
@@ -264,14 +264,14 @@ public func logSuccess(_ text: String, object: Any?) {
 // MARK: - Warning and Error Logging
 
 /// Logs a warning message with warning category prefix in debug builds.
-/// 
+///
 /// This function is used for logging warning conditions that don't prevent
 /// application execution but may indicate potential issues.
-/// 
+///
 /// - Parameters:
 ///   - text: The warning message to log
 ///   - terminator: Optional terminator string. If nil, uses default newline
-/// 
+///
 /// Example:
 /// ```swift
 /// logWarning("Deprecated API usage detected")
@@ -284,13 +284,13 @@ public func logSuccess(_ text: String, object: Any?) {
 }
 
 /// Logs an error message with error category prefix in debug builds.
-/// 
+///
 /// This function is used for logging error conditions and failures.
-/// 
+///
 /// - Parameters:
 ///   - text: The error message to log
 ///   - terminator: Optional terminator string. If nil, uses default newline
-/// 
+///
 /// Example:
 /// ```swift
 /// logError("Failed to load configuration")
@@ -303,15 +303,15 @@ public func logSuccess(_ text: String, object: Any?) {
 }
 
 /// Logs an error message with detailed error information in debug builds.
-/// 
+///
 /// This function logs an error message along with the localized description
 /// and full error details for comprehensive debugging.
-/// 
+///
 /// - Parameters:
 ///   - text: The error message to log
 ///   - error: The Error object containing detailed error information
 ///   - terminator: Optional terminator string. If nil, uses default newline
-/// 
+///
 /// Example:
 /// ```swift
 /// do {
@@ -330,10 +330,10 @@ public func logSuccess(_ text: String, object: Any?) {
 }
 
 /// Logs an error message with detailed error information in debug builds.
-/// 
+///
 /// This is a convenience overload that provides a more natural parameter order
 /// for error logging with Error objects.
-/// 
+///
 /// - Parameters:
 ///   - text: The error message to log
 ///   - error: The Error object containing detailed error information
@@ -343,15 +343,15 @@ public func logSuccess(_ text: String, object: Any?) {
 }
 
 /// Logs an error message with a string error description in debug builds.
-/// 
+///
 /// This function logs an error message along with a string-based error description
 /// for cases where you have error information as a string rather than an Error object.
-/// 
+///
 /// - Parameters:
 ///   - text: The error message to log
 ///   - error: String description of the error
 ///   - terminator: Optional terminator string. If nil, uses default newline
-/// 
+///
 /// Example:
 /// ```swift
 /// logError("Validation failed", error: "Email address is invalid")
@@ -367,13 +367,13 @@ public func logSuccess(_ text: String, object: Any?) {
 // MARK: - Specialized Logging
 
 /// Logs a deletion message with deleted category prefix in debug builds.
-/// 
+///
 /// This function is used for logging deletion operations and cleanup activities.
-/// 
+///
 /// - Parameters:
 ///   - text: The deletion message to log
 ///   - terminator: Optional terminator string. If nil, uses default newline
-/// 
+///
 /// Example:
 /// ```swift
 /// logDeleted("Temporary files cleaned up")
@@ -386,14 +386,14 @@ public func logSuccess(_ text: String, object: Any?) {
 }
 
 /// Logs a data-related message with data category prefix in debug builds.
-/// 
+///
 /// This function is used for logging data operations, database activities,
 /// and data processing information.
-/// 
+///
 /// - Parameters:
 ///   - text: The data message to log
 ///   - terminator: Optional terminator string. If nil, uses default newline
-/// 
+///
 /// Example:
 /// ```swift
 /// logData("User preferences synchronized")
@@ -406,27 +406,27 @@ public func logSuccess(_ text: String, object: Any?) {
 }
 
 /// Logs URL information with appropriate category prefix in debug builds.
-/// 
+///
 /// This function logs URL information, automatically detecting whether the URL
 /// is a file URL or web URL and using appropriate icons and formatting.
-/// 
+///
 /// - Parameters:
 ///   - text: Optional descriptive text for the URL
 ///   - url: The URL to log (can be nil)
 ///   - terminator: Optional terminator string. If nil, uses default newline
-/// 
+///
 /// Example:
 /// ```swift
 /// let webURL = URL(string: "https://example.com")
 /// logUrl("API endpoint", url: webURL)
 /// // Output: 🌐 [URL] API endpoint:
 /// //         https://example.com
-/// 
+///
 /// let fileURL = URL(fileURLWithPath: "/tmp/file.txt")
 /// logUrl("Temp file", url: fileURL)
 /// // Output: 📁 [URL] Temp file:
 /// //         /tmp/file.txt
-/// 
+///
 /// logUrl("Invalid", url: nil)
 /// // Output: 🔗 [URL] Nil or not valid URL
 /// ```

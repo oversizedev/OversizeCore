@@ -7,79 +7,88 @@ import Foundation
 
 public extension Date {
     func startOfMonth() -> Date {
-        Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: Calendar.current.startOfDay(for: self)))!
+        Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: Calendar.current.startOfDay(for: self))) ?? self
     }
 
     func endOfMonth() -> Date {
-        Calendar.current.date(byAdding: DateComponents(month: 1, day: -1), to: startOfMonth())!
+        Calendar.current.date(byAdding: DateComponents(month: 1, day: -1), to: startOfMonth()) ?? self
     }
 }
 
 public extension Date {
     static var yesterday: Date { Date().dayBefore }
     static var tomorrow: Date { Date().dayAfter }
+
     var dayBefore: Date {
-        Calendar.current.date(byAdding: .day, value: -1, to: noon)!
+        Calendar.current.date(byAdding: .day, value: -1, to: noon) ?? self
     }
 
     var dayAfter: Date {
-        Calendar.current.date(byAdding: .day, value: 1, to: noon)!
+        Calendar.current.date(byAdding: .day, value: 1, to: noon) ?? self
     }
 
     var weekAfter: Date {
-        Calendar.current.date(byAdding: .day, value: 7, to: noon)!
+        Calendar.current.date(byAdding: .weekOfYear, value: 1, to: noon) ?? self
     }
 
     var weekBefore: Date {
-        Calendar.current.date(byAdding: .day, value: -7, to: noon)!
+        Calendar.current.date(byAdding: .weekOfYear, value: -1, to: noon) ?? self
     }
 
     var hour: Date {
-        Calendar.current.date(bySettingHour: 1, minute: 0, second: 0, of: self)!
+        Calendar.current.date(byAdding: .hour, value: 1, to: self) ?? self
     }
 
     var year: Date {
-        Calendar.current.date(byAdding: .year, value: 1, to: self)!
+        Calendar.current.date(byAdding: .year, value: 1, to: self) ?? self
     }
 
     var yearBefore: Date {
-        Calendar.current.date(byAdding: .year, value: -1, to: self)!
+        Calendar.current.date(byAdding: .year, value: -1, to: self) ?? self
     }
 
     var month: Date {
-        Calendar.current.date(byAdding: .month, value: 1, to: self)!
+        Calendar.current.date(byAdding: .month, value: 1, to: self) ?? self
     }
 
     var minute: Date {
-        Calendar.current.date(byAdding: .minute, value: 1, to: self)!
+        Calendar.current.date(byAdding: .minute, value: 1, to: self) ?? self
     }
 
     var minuteBefore: Date {
-        Calendar.current.date(byAdding: .minute, value: -1, to: self)!
+        Calendar.current.date(byAdding: .minute, value: -1, to: self) ?? self
     }
 
     var halfHour: Date {
-        Calendar.current.date(byAdding: .minute, value: 30, to: self)!
+        Calendar.current.date(byAdding: .minute, value: 30, to: self) ?? self
     }
 
     var monthBefore: Date {
-        Calendar.current.date(byAdding: .day, value: -30, to: self)!
+        Calendar.current.date(byAdding: .month, value: -1, to: self) ?? self
     }
 
     var halfYearBefore: Date {
-        Calendar.current.date(byAdding: .month, value: -6, to: self)!
+        Calendar.current.date(byAdding: .month, value: -6, to: self) ?? self
     }
 
     var quarterBefore: Date {
-        Calendar.current.date(byAdding: .month, value: -3, to: self)!
+        Calendar.current.date(byAdding: .month, value: -3, to: self) ?? self
     }
 
     var noon: Date {
-        Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self)!
+        Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self) ?? self
     }
 
     var midnight: Date {
-        Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: self)!
+        Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: self) ?? self
+    }
+
+    var endOfDay: Date {
+        Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: self) ?? self
+    }
+
+    var startOfDay: Date {
+        Calendar.current.startOfDay(for: self)
     }
 
     var monthNumber: Int {

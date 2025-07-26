@@ -25,6 +25,7 @@ public extension Locale.Currency {
     }
 
     // MARK: - Deprecated aliases for backward compatibility
+
     @available(*, deprecated, renamed: "displayName", message: "Use displayName instead")
     var dispalyName: String? {
         displayName
