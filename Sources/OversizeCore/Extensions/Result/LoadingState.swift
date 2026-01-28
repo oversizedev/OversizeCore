@@ -31,6 +31,7 @@ public extension LoadingState {
         }
     }
 
+    @available(*, deprecated, message: "Use result instead", renamed: "result")
     var successResult: Result? {
         switch self {
         case let .result(result):
@@ -40,7 +41,6 @@ public extension LoadingState {
         }
     }
 
-    @available(*, deprecated, message: "Use successResult instead", renamed: "successResult")
     var result: Result? {
         switch self {
         case let .result(result):
@@ -50,6 +50,7 @@ public extension LoadingState {
         }
     }
 
+    @available(*, deprecated, message: "Use error instead", renamed: "error")
     var failureError: Error? {
         switch self {
         case let .error(error):
@@ -58,8 +59,7 @@ public extension LoadingState {
             nil
         }
     }
-
-    @available(*, deprecated, message: "Use failureError instead", renamed: "failureError")
+    
     var error: Error? {
         switch self {
         case let .error(error):
