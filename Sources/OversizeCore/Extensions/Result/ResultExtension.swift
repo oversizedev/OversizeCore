@@ -22,7 +22,9 @@ public extension Result {
 }
 
 public extension Result {
-    var isFailure: Bool { !isSuccess }
+    var isFailure: Bool {
+        !isSuccess
+    }
 
     var isSuccess: Bool {
         switch self {

@@ -59,7 +59,7 @@ public extension LoadingState {
             nil
         }
     }
-    
+
     var error: Error? {
         switch self {
         case let .error(error):

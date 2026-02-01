@@ -19,5 +19,7 @@ extension SortOrder: @retroactive CaseIterable, @retroactive Identifiable {
         }
     }
 
-    public var id: String { title }
+    public var id: String {
+        title
+    }
 }

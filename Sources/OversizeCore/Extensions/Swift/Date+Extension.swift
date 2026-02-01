@@ -16,8 +16,13 @@ public extension Date {
 }
 
 public extension Date {
-    static var yesterday: Date { Date().dayBefore }
-    static var tomorrow: Date { Date().dayAfter }
+    static var yesterday: Date {
+        Date().dayBefore
+    }
+
+    static var tomorrow: Date {
+        Date().dayAfter
+    }
 
     var dayBefore: Date {
         Calendar.current.date(byAdding: .day, value: -1, to: noon) ?? self
@@ -161,8 +166,7 @@ public extension Date {
 
     func component(_ type: Calendar.Component) -> Int {
         let calendar = Calendar.current
-        let t = calendar.component(type, from: self)
-        return t
+        return calendar.component(type, from: self)
     }
 }
 

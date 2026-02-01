@@ -1,16 +1,34 @@
+//
+// Copyright © 2025 Alexander Romanov
+// NotificationError.swift, created on 01.02.2025
+//
+
 import Foundation
 
 public enum NotificationError: Error, LocalizedError, Sendable {
-    case notDetermined
-    case notAccess
-    case unknown
+    // MARK: - Permission
+
+    case permissionNotDetermined
+    case accessDenied
+
+    // MARK: - Operations
+
+    case schedulingFailed
+
+    // MARK: - Unknown
+
+    case unknown(Error?)
+
+    // MARK: - LocalizedError
 
     public var errorDescription: String? {
         switch self {
-        case .notDetermined:
+        case .permissionNotDetermined:
             "Notification permission not determined"
-        case .notAccess:
+        case .accessDenied:
             "No access to notifications"
+        case .schedulingFailed:
+            "Failed to schedule notification"
         case .unknown:
             "Notification error"
         }
@@ -18,21 +36,39 @@ public enum NotificationError: Error, LocalizedError, Sendable {
 
     public var failureReason: String? {
         switch self {
-        case .notDetermined:
+        case .permissionNotDetermined:
             "Notification permission has not been granted yet."
-        case .notAccess:
+        case .accessDenied:
             "Notification access is restricted or denied."
-        case .unknown:
-            "An unknown notification error occurred."
+        case .schedulingFailed:
+            "The notification could not be scheduled."
+        case let .unknown(error):
+            error?.localizedDescription ?? "An unknown notification error occurred."
         }
     }
 
     public var recoverySuggestion: String? {
         switch self {
-        case .notAccess, .notDetermined:
+        case .permissionNotDetermined:
+            "Allow notifications when prompted and try again."
+        case .accessDenied:
             "Allow notifications in Settings and try again."
-        default:
+        case .schedulingFailed:
+            "Check the notification settings and try again."
+        case .unknown:
             "Please try again later."
         }
+    }
+
+    // MARK: - Deprecated Aliases
+
+    @available(*, deprecated, renamed: "permissionNotDetermined")
+    public static var notDetermined: NotificationError {
+        .permissionNotDetermined
+    }
+
+    @available(*, deprecated, renamed: "accessDenied")
+    public static var notAccess: NotificationError {
+        .accessDenied
     }
 }

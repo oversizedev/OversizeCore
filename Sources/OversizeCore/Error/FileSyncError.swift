@@ -7,27 +7,27 @@ public enum FileSyncError: Error, LocalizedError, Sendable {
     public var errorDescription: String? {
         switch self {
         case let .fileManager(error):
-            return error.errorDescription
+            error.errorDescription
         case let .cloudDocuments(error):
-            return error.errorDescription
+            error.errorDescription
         }
     }
 
     public var failureReason: String? {
         switch self {
         case let .fileManager(error):
-            return error.failureReason
+            error.failureReason
         case let .cloudDocuments(error):
-            return error.failureReason
+            error.failureReason
         }
     }
 
     public var recoverySuggestion: String? {
         switch self {
         case let .fileManager(error):
-            return error.recoverySuggestion
+            error.recoverySuggestion
         case let .cloudDocuments(error):
-            return error.recoverySuggestion
+            error.recoverySuggestion
         }
     }
 }

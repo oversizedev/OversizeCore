@@ -1,25 +1,43 @@
+//
+// Copyright © 2025 Alexander Romanov
+// EventKitError.swift, created on 01.02.2025
+//
+
 import Foundation
 
 public enum EventKitError: Error, LocalizedError, Sendable {
-    case deleteItem
-    case updateItem
-    case savingItem
-    case fetchItems
-    case notAccess
+    // MARK: - Core Operations
+
+    case saveFailed
+    case fetchFailed
+    case deleteFailed
+    case updateFailed
+
+    // MARK: - Permission
+
+    case accessDenied
+
+    // MARK: - Data
+
     case itemNotFound
-    case unknown
+
+    // MARK: - Unknown
+
+    case unknown(Error?)
+
+    // MARK: - LocalizedError
 
     public var errorDescription: String? {
         switch self {
-        case .deleteItem:
-            "Failed to delete event"
-        case .updateItem:
-            "Failed to update event"
-        case .savingItem:
+        case .saveFailed:
             "Failed to save event"
-        case .fetchItems:
+        case .fetchFailed:
             "Failed to fetch events"
-        case .notAccess:
+        case .deleteFailed:
+            "Failed to delete event"
+        case .updateFailed:
+            "Failed to update event"
+        case .accessDenied:
             "No access to calendar"
         case .itemNotFound:
             "Event not found"
@@ -30,21 +48,66 @@ public enum EventKitError: Error, LocalizedError, Sendable {
 
     public var failureReason: String? {
         switch self {
-        case .notAccess:
+        case .saveFailed:
+            "The event could not be saved to the calendar."
+        case .fetchFailed:
+            "The events could not be retrieved from the calendar."
+        case .deleteFailed:
+            "The event could not be deleted from the calendar."
+        case .updateFailed:
+            "The event could not be updated in the calendar."
+        case .accessDenied:
             "Calendar access is restricted or denied."
         case .itemNotFound:
             "The requested event could not be found."
-        default:
-            "The calendar operation could not be completed."
+        case let .unknown(error):
+            error?.localizedDescription ?? "An unknown calendar error occurred."
         }
     }
 
     public var recoverySuggestion: String? {
         switch self {
-        case .notAccess:
+        case .saveFailed:
+            "Check if the calendar is writable and try again."
+        case .fetchFailed:
+            "Refresh the calendar and try again."
+        case .deleteFailed:
+            "Make sure the event exists and try again."
+        case .updateFailed:
+            "Make sure the event exists and try again."
+        case .accessDenied:
             "Allow calendar access in Settings and try again."
-        default:
+        case .itemNotFound:
+            "Refresh the calendar and try again."
+        case .unknown:
             "Please try again later."
         }
+    }
+
+    // MARK: - Deprecated Aliases
+
+    @available(*, deprecated, renamed: "deleteFailed")
+    public static var deleteItem: EventKitError {
+        .deleteFailed
+    }
+
+    @available(*, deprecated, renamed: "updateFailed")
+    public static var updateItem: EventKitError {
+        .updateFailed
+    }
+
+    @available(*, deprecated, renamed: "saveFailed")
+    public static var savingItem: EventKitError {
+        .saveFailed
+    }
+
+    @available(*, deprecated, renamed: "fetchFailed")
+    public static var fetchItems: EventKitError {
+        .fetchFailed
+    }
+
+    @available(*, deprecated, renamed: "accessDenied")
+    public static var notAccess: EventKitError {
+        .accessDenied
     }
 }
