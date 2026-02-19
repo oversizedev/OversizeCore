@@ -1,11 +1,11 @@
 //
 // Copyright © 2025 Alexander Romanov
-// FileManagerError.swift, created on 01.02.2025
+// FileError.swift, created on 02.02.2025
 //
 
 import Foundation
 
-public enum FileManagerError: Error, LocalizedError, Sendable {
+public enum FileError: Error, LocalizedError, Sendable {
     // MARK: - Core Operations
 
     case saveFailed
@@ -36,7 +36,7 @@ public enum FileManagerError: Error, LocalizedError, Sendable {
         case .accessDenied:
             "No access to files"
         case .unknown:
-            "File manager error"
+            "File error"
         }
     }
 
@@ -53,7 +53,7 @@ public enum FileManagerError: Error, LocalizedError, Sendable {
         case .accessDenied:
             "File access is restricted or denied."
         case let .unknown(error):
-            error?.localizedDescription ?? "An unknown file manager error occurred."
+            error?.localizedDescription ?? "An unknown file error occurred."
         }
     }
 
@@ -72,32 +72,5 @@ public enum FileManagerError: Error, LocalizedError, Sendable {
         case .unknown:
             "Please try again later."
         }
-    }
-
-    // MARK: - Deprecated Aliases
-
-    @available(*, deprecated, renamed: "deleteFailed")
-    public static var deleteItem: FileManagerError {
-        .deleteFailed
-    }
-
-    @available(*, deprecated, renamed: "updateFailed")
-    public static var updateItem: FileManagerError {
-        .updateFailed
-    }
-
-    @available(*, deprecated, renamed: "saveFailed")
-    public static var savingItem: FileManagerError {
-        .saveFailed
-    }
-
-    @available(*, deprecated, renamed: "fetchFailed")
-    public static var fetchItems: FileManagerError {
-        .fetchFailed
-    }
-
-    @available(*, deprecated, renamed: "accessDenied")
-    public static var notAccess: FileManagerError {
-        .accessDenied
     }
 }

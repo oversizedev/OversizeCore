@@ -1,11 +1,11 @@
 //
 // Copyright © 2025 Alexander Romanov
-// HealthKitError.swift, created on 01.02.2025
+// HealthError.swift, created on 02.02.2025
 //
 
 import Foundation
 
-public enum HealthKitError: Error, LocalizedError, Sendable {
+public enum HealthError: Error, LocalizedError, Sendable {
     // MARK: - Core Operations
 
     case saveFailed
@@ -45,7 +45,7 @@ public enum HealthKitError: Error, LocalizedError, Sendable {
         case .dataTypeNotAvailable:
             "Health data type not available"
         case .unknown:
-            "HealthKit error"
+            "Health error"
         }
     }
 
@@ -66,7 +66,7 @@ public enum HealthKitError: Error, LocalizedError, Sendable {
         case .dataTypeNotAvailable:
             "The requested health data type is not available on this device."
         case let .unknown(error):
-            error?.localizedDescription ?? "An unknown HealthKit error occurred."
+            error?.localizedDescription ?? "An unknown Health error occurred."
         }
     }
 
@@ -89,32 +89,5 @@ public enum HealthKitError: Error, LocalizedError, Sendable {
         case .unknown:
             "Please try again later."
         }
-    }
-
-    // MARK: - Deprecated Aliases
-
-    @available(*, deprecated, renamed: "deleteFailed")
-    public static var deleteItem: HealthKitError {
-        .deleteFailed
-    }
-
-    @available(*, deprecated, renamed: "updateFailed")
-    public static var updateItem: HealthKitError {
-        .updateFailed
-    }
-
-    @available(*, deprecated, renamed: "saveFailed")
-    public static var savingItem: HealthKitError {
-        .saveFailed
-    }
-
-    @available(*, deprecated, renamed: "fetchFailed")
-    public static var fetchItems: HealthKitError {
-        .fetchFailed
-    }
-
-    @available(*, deprecated, renamed: "accessDenied")
-    public static var notAccess: HealthKitError {
-        .accessDenied
     }
 }

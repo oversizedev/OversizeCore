@@ -1,11 +1,11 @@
 //
 // Copyright © 2025 Alexander Romanov
-// EventKitError.swift, created on 01.02.2025
+// CalendarError.swift, created on 02.02.2025
 //
 
 import Foundation
 
-public enum EventKitError: Error, LocalizedError, Sendable {
+public enum CalendarError: Error, LocalizedError, Sendable {
     // MARK: - Core Operations
 
     case saveFailed
@@ -82,32 +82,5 @@ public enum EventKitError: Error, LocalizedError, Sendable {
         case .unknown:
             "Please try again later."
         }
-    }
-
-    // MARK: - Deprecated Aliases
-
-    @available(*, deprecated, renamed: "deleteFailed")
-    public static var deleteItem: EventKitError {
-        .deleteFailed
-    }
-
-    @available(*, deprecated, renamed: "updateFailed")
-    public static var updateItem: EventKitError {
-        .updateFailed
-    }
-
-    @available(*, deprecated, renamed: "saveFailed")
-    public static var savingItem: EventKitError {
-        .saveFailed
-    }
-
-    @available(*, deprecated, renamed: "fetchFailed")
-    public static var fetchItems: EventKitError {
-        .fetchFailed
-    }
-
-    @available(*, deprecated, renamed: "accessDenied")
-    public static var notAccess: EventKitError {
-        .accessDenied
     }
 }

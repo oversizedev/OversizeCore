@@ -1,49 +1,60 @@
 //
 // Copyright © 2025 Alexander Romanov
-// SwiftDataError.swift, created on 11.07.2025
+// PersistenceError.swift, created on 02.02.2025
 //
 
 import Foundation
 
-public enum SwiftDataError: Error, LocalizedError, Sendable {
-    // Core operations
+public enum PersistenceError: Error, LocalizedError, Sendable {
+    // MARK: - Core Operations
+
     case saveFailed
     case fetchFailed
     case deleteFailed
     case updateFailed
 
-    /// Batch operations
+    // MARK: - Batch Operations
+
     case batchOperationFailed
 
-    // Model & Configuration
+    // MARK: - Model & Configuration
+
+    case migrationFailed
     case modelConfigurationError
     case containerInitializationFailed
-    case migrationFailed
 
-    // Query & Predicate
+    // MARK: - Query & Predicate
+
     case invalidPredicate
     case invalidSortDescriptor
     case invalidFetchDescriptor
 
-    // Data integrity
+    // MARK: - Data Integrity
+
     case duplicateItem
     case itemNotFound
     case relationshipConstraintViolation
     case validationFailed(reason: String)
 
-    // Transaction
+    // MARK: - Transaction
+
     case transactionFailed
     case concurrentModification
 
-    /// Performance
+    // MARK: - Performance
+
     case indexingError
 
-    // Storage
+    // MARK: - Storage
+
     case storageLimitExceeded
     case corruptedData
 
-    /// Unknown
+    // MARK: - Unknown
+
     case unknown(Error?)
+
+    // MARK: - LocalizedError
 
     public var errorDescription: String? {
         switch self {
@@ -57,12 +68,12 @@ public enum SwiftDataError: Error, LocalizedError, Sendable {
             "Failed to update data"
         case .batchOperationFailed:
             "Batch operation failed"
+        case .migrationFailed:
+            "Data migration failed"
         case .modelConfigurationError:
             "Model configuration error"
         case .containerInitializationFailed:
             "Failed to initialize data container"
-        case .migrationFailed:
-            "Data migration failed"
         case .invalidPredicate:
             "Invalid search criteria"
         case .invalidSortDescriptor:
@@ -88,7 +99,7 @@ public enum SwiftDataError: Error, LocalizedError, Sendable {
         case .corruptedData:
             "Data is corrupted"
         case .unknown:
-            "SwiftData error"
+            "Data persistence error"
         }
     }
 
@@ -104,12 +115,12 @@ public enum SwiftDataError: Error, LocalizedError, Sendable {
             "The data could not be updated in the database."
         case .batchOperationFailed:
             "The batch operation could not be completed."
+        case .migrationFailed:
+            "The data migration could not be completed."
         case .modelConfigurationError:
             "The data model configuration is invalid."
         case .containerInitializationFailed:
             "The data container could not be initialized."
-        case .migrationFailed:
-            "The data migration could not be completed."
         case .invalidPredicate:
             "The search criteria format is not valid."
         case .invalidSortDescriptor:
@@ -135,7 +146,7 @@ public enum SwiftDataError: Error, LocalizedError, Sendable {
         case .corruptedData:
             "The database contains corrupted data."
         case let .unknown(error):
-            error?.localizedDescription ?? "An unknown SwiftData error occurred."
+            error?.localizedDescription ?? "An unknown data persistence error occurred."
         }
     }
 
@@ -151,12 +162,12 @@ public enum SwiftDataError: Error, LocalizedError, Sendable {
             "Make sure the item exists and try again."
         case .batchOperationFailed:
             "Try performing the operation in smaller batches."
+        case .migrationFailed:
+            "The app may need to be reinstalled."
         case .modelConfigurationError:
             "Restart the app and try again."
         case .containerInitializationFailed:
             "Restart the app and try again."
-        case .migrationFailed:
-            "The app may need to be reinstalled."
         case .invalidPredicate:
             "Check your query parameters and try again."
         case .invalidSortDescriptor:
