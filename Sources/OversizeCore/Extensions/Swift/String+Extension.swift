@@ -12,12 +12,12 @@ import SwiftUI
 
 public extension String {
     /// Returns a new string with leading and trailing whitespace and newlines removed.
-    /// 
+    ///
     /// This computed property trims whitespace and newline characters from both ends
     /// of the string, useful for cleaning user input or processing text data.
-    /// 
+    ///
     /// - Returns: A new string with whitespace and newlines trimmed
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let text = "  Hello World  \n"
@@ -29,13 +29,13 @@ public extension String {
     }
 
     /// Validates if the string is a properly formatted email address.
-    /// 
+    ///
     /// This computed property uses regular expression validation to check if the string
     /// matches a valid email format. It checks for the standard email pattern including
     /// local part, @ symbol, domain, and top-level domain.
-    /// 
+    ///
     /// - Returns: `true` if the string is a valid email format, `false` otherwise
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let email1 = "user@example.com"
@@ -50,12 +50,12 @@ public extension String {
     }
 
     /// Validates if the string is a properly formatted URL.
-    /// 
+    ///
     /// This computed property uses regular expression validation to check if the string
     /// matches a valid HTTP or HTTPS URL format, including domain, port, path, and query parameters.
-    /// 
+    ///
     /// - Returns: `true` if the string is a valid URL format, `false` otherwise
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let url1 = "https://www.example.com/path?param=value"
@@ -70,12 +70,12 @@ public extension String {
     }
 
     /// Validates if the string contains only alphabetic characters and underscores.
-    /// 
+    ///
     /// This computed property checks if the string consists only of letters (A-Z, a-z)
     /// and underscore characters, useful for validating identifiers or names.
-    /// 
+    ///
     /// - Returns: `true` if the string contains only alphabetic characters and underscores, `false` otherwise
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let valid = "Hello_World"
@@ -90,18 +90,18 @@ public extension String {
     }
 
     /// Returns a URL-encoded version of the string.
-    /// 
+    ///
     /// This computed property applies percent encoding to the string, making it safe
     /// for use in URLs by encoding special characters.
-    /// 
+    ///
     /// - Returns: A URL-encoded string
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let text = "Hello World!"
     /// let encoded = text.urlEncode // "Hello%20World%21"
     /// ```
-    /// 
+    ///
     /// - Warning: This method force-unwraps the result. Ensure the string is valid for encoding.
     var urlEncode: String {
         let originalString = self
@@ -110,17 +110,17 @@ public extension String {
     }
 
     /// Converts the string to a URL object.
-    /// 
+    ///
     /// This computed property attempts to create a URL from the string, with special
     /// handling for URLs that start with "//" (protocol-relative URLs).
-    /// 
+    ///
     /// - Returns: A URL object if the string is a valid URL, `nil` otherwise
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let urlString = "https://example.com"
     /// let url = urlString.url // URL(string: "https://example.com")
-    /// 
+    ///
     /// let protocolRelative = "//example.com"
     /// let url2 = protocolRelative.url // URL(string: "http://example.com")
     /// ```
@@ -138,13 +138,13 @@ public extension String {
     }
 
     /// Converts decimal separators to match the current locale.
-    /// 
+    ///
     /// This computed property adjusts decimal separators in the string to match
     /// the current locale's decimal separator (comma or period), useful for
     /// processing numeric strings across different locales.
-    /// 
+    ///
     /// - Returns: A string with decimal separators adjusted for the current locale
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// // In a locale that uses comma as decimal separator
@@ -166,13 +166,13 @@ public extension String {
     }
 
     /// Extracts only the numeric characters from the string.
-    /// 
+    ///
     /// This computed property removes all non-numeric characters, leaving only
     /// decimal digits (0-9). Useful for cleaning phone numbers or extracting
     /// numbers from mixed content.
-    /// 
+    ///
     /// - Returns: A string containing only numeric characters
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let mixed = "Phone: (555) 123-4567"
@@ -185,13 +185,13 @@ public extension String {
     }
 
     /// Extracts only the letter characters from the string.
-    /// 
+    ///
     /// This computed property removes all non-letter characters, leaving only
     /// alphabetic characters (A-Z, a-z). Useful for extracting text from
     /// mixed alphanumeric content.
-    /// 
+    ///
     /// - Returns: A string containing only letter characters
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let mixed = "Hello123World456"
@@ -204,12 +204,12 @@ public extension String {
     }
 
     /// Extracts only letters and spaces from the string.
-    /// 
+    ///
     /// This computed property removes all characters except letters and spaces,
     /// useful for cleaning text input while preserving word separation.
-    /// 
+    ///
     /// - Returns: A string containing only letters and spaces
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let mixed = "Hello123 World456!"
@@ -222,30 +222,30 @@ public extension String {
     }
 
     /// Converts the string to UTF-8 encoded Data.
-    /// 
+    ///
     /// This computed property converts the string to Data using UTF-8 encoding,
     /// commonly needed for network operations or file I/O.
-    /// 
+    ///
     /// - Returns: UTF-8 encoded Data representation of the string
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let text = "Hello, World!"
     /// let data = text.data // Data representation
     /// ```
-    /// 
+    ///
     /// - Warning: This method force-unwraps the result. The string must be valid for UTF-8 encoding.
     var data: Data {
         self.data(using: String.Encoding.utf8) ?? Data()
     }
 
     /// Returns the NSRange covering the entire string.
-    /// 
+    ///
     /// This computed property creates an NSRange that spans the entire string,
     /// useful for string manipulation operations that require NSRange parameters.
-    /// 
+    ///
     /// - Returns: NSRange covering the entire string using UTF-16 encoding
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let text = "Hello, World!"
@@ -260,19 +260,19 @@ public extension String {
 
 public extension String {
     /// Converts the string to a Date using ISO8601 formatting.
-    /// 
+    ///
     /// This function parses the string as an ISO8601 date format and returns
     /// a Date object. The format options can be customized to handle different
     /// ISO8601 variants.
-    /// 
+    ///
     /// - Parameter formatOptions: ISO8601 formatting options to use for parsing
     /// - Returns: A Date object if parsing succeeds, `nil` otherwise
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let dateString = "2024-01-15"
     /// let date = dateString.toDate() // Uses .withFullDate by default
-    /// 
+    ///
     /// let timeString = "2024-01-15T14:30:25Z"
     /// let dateTime = timeString.toDate(formatOptions: [.withFullDate, .withTime])
     /// ```
@@ -287,18 +287,18 @@ public extension String {
 
 public extension String {
     /// Converts the string to an enum case of the specified type.
-    /// 
+    ///
     /// This generic function attempts to create an enum value from the string,
     /// where the string represents the raw value of the enum case.
-    /// 
+    ///
     /// - Returns: An enum case of type T if the conversion succeeds, `nil` otherwise
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// enum Status: String {
     ///     case active, inactive, pending
     /// }
-    /// 
+    ///
     /// let statusString = "active"
     /// let status: Status? = statusString.enumCase() // Status.active
     /// ```
@@ -310,13 +310,13 @@ public extension String {
     }
 
     /// Finds all matches for a regular expression pattern in the string.
-    /// 
+    ///
     /// This function searches the string for all occurrences of the specified
     /// regular expression pattern and returns an array of match groups for each match.
-    /// 
+    ///
     /// - Parameter regex: The regular expression pattern to search for
     /// - Returns: An array of string arrays, where each inner array contains the match groups for one match
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let text = "Contact: john@example.com or jane@test.org"
@@ -347,13 +347,13 @@ public extension String {
 
 extension String {
     /// Returns a new string with the first letter capitalized.
-    /// 
+    ///
     /// This function capitalizes only the first character of the string,
     /// leaving the rest of the string unchanged. Useful for proper name
     /// formatting or sentence capitalization.
-    /// 
+    ///
     /// - Returns: A new string with the first letter capitalized
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let text = "hello world"
@@ -364,9 +364,9 @@ extension String {
     }
 
     /// Capitalizes the first letter of the string in place.
-    /// 
+    ///
     /// This mutating function modifies the string by capitalizing its first character.
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// var text = "hello world"
@@ -380,13 +380,13 @@ extension String {
 
 extension String {
     /// Returns a new string with the first letter lowercased.
-    /// 
+    ///
     /// This function lowercases only the first character of the string,
     /// leaving the rest of the string unchanged. Useful for camelCase
     /// conversion or specific formatting requirements.
-    /// 
+    ///
     /// - Returns: A new string with the first letter lowercased
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let text = "Hello World"
@@ -397,9 +397,9 @@ extension String {
     }
 
     /// Lowercases the first letter of the string in place.
-    /// 
+    ///
     /// This mutating function modifies the string by lowercasing its first character.
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// var text = "Hello World"
@@ -417,16 +417,16 @@ extension String {
 
 extension String {
     /// Converts HTML string to attributed string with specified font and color.
-    /// 
+    ///
     /// This function parses HTML content and creates an NSAttributedString with
     /// the specified font and color applied to the entire string. Useful for
     /// displaying HTML content in UIKit components.
-    /// 
+    ///
     /// - Parameters:
     ///   - font: The UIFont to apply to the attributed string
     ///   - color: The UIColor to apply to the attributed string
     /// - Returns: An NSAttributedString if HTML parsing succeeds, `nil` otherwise
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let html = "<p>Hello <b>World</b></p>"
@@ -434,7 +434,7 @@ extension String {
     /// let color = UIColor.black
     /// let attributed = html.getAttributedStringFromHtml(font: font, color: color)
     /// ```
-    /// 
+    ///
     /// - Note: This function is only available on iOS, tvOS, and watchOS platforms.
     func getAttributedStringFromHtml(font: UIFont, color: UIColor) -> NSAttributedString? {
         guard let data = data(using: String.Encoding.utf16, allowLossyConversion: false) else {
@@ -468,20 +468,20 @@ extension String {
 
 public extension String {
     /// Calculates the size required to display the string with the specified font.
-    /// 
+    ///
     /// This function measures the bounding size needed to display the string
     /// using the specified font, useful for layout calculations and UI sizing.
-    /// 
+    ///
     /// - Parameter font: The UIFont to use for measurement
     /// - Returns: The CGSize required to display the string
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let text = "Hello, World!"
     /// let font = UIFont.systemFont(ofSize: 16)
     /// let size = text.size(font: font) // CGSize(width: 87.5, height: 19.0)
     /// ```
-    /// 
+    ///
     /// - Note: This function is only available on iOS, tvOS, and watchOS platforms.
     func size(font: UIFont) -> CGSize {
         let originalString = self as NSString
@@ -489,20 +489,20 @@ public extension String {
     }
 
     /// Calculates the width required to display the string with the specified font.
-    /// 
+    ///
     /// This function measures the width needed to display the string using the
     /// specified font, providing a convenient way to get just the width measurement.
-    /// 
+    ///
     /// - Parameter font: The UIFont to use for measurement
     /// - Returns: The CGFloat width required to display the string
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let text = "Hello, World!"
     /// let font = UIFont.systemFont(ofSize: 16)
     /// let width = text.width(font: font) // 87.5
     /// ```
-    /// 
+    ///
     /// - Note: This function is only available on iOS, tvOS, and watchOS platforms.
     func width(font: UIFont) -> CGFloat {
         size(font: font).width
@@ -513,21 +513,21 @@ public extension String {
 
 public extension NSAttributedString {
     /// Calculates the height required to display the attributed string within a given width.
-    /// 
+    ///
     /// This function measures the height needed to display the attributed string
     /// when constrained to a specific width, useful for dynamic text layout
     /// and table view cell sizing.
-    /// 
+    ///
     /// - Parameter width: The maximum width constraint for the text
     /// - Returns: The CGFloat height required to display the attributed string
-    /// 
+    ///
     /// Example:
     /// ```swift
     /// let attributedText = NSAttributedString(string: "Long text content...")
     /// let maxWidth: CGFloat = 300
     /// let height = attributedText.height(width: maxWidth) // Calculated height
     /// ```
-    /// 
+    ///
     /// - Note: This function is only available on iOS, tvOS, and watchOS platforms.
     func height(width: CGFloat) -> CGFloat {
         let constraintRect: CGSize = .init(width: width, height: CGFloat.greatestFiniteMagnitude)
