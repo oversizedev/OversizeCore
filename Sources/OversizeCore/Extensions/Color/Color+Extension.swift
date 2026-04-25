@@ -3,6 +3,7 @@
 // Color+Extension.swift
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 
 // MARK: - Color Component Manipulation (iOS Only)
@@ -206,3 +207,4 @@ public extension Color {
         )
     }
 }
+#endif

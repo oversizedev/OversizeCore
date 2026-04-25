@@ -4,7 +4,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 // swiftlint:disable all
 
@@ -414,6 +413,7 @@ extension String {
 // MARK: - Platform-Specific Extensions
 
 #if os(iOS) || os(tvOS) || os(watchOS)
+import UIKit
 
 extension String {
     /// Converts HTML string to attributed string with specified font and color.

@@ -3,6 +3,7 @@
 // ColorData.swift, created on 13.06.2024
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 
 public struct ColorData: Codable, Sendable {
@@ -42,3 +43,4 @@ public struct ColorData: Codable, Sendable {
         }
     }
 }
+#endif

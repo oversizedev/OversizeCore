@@ -3,6 +3,7 @@
 // CLLocationCoordinate2D+Extension.swift
 //
 
+#if canImport(MapKit)
 import MapKit
 
 extension CLLocationCoordinate2D: @retroactive Identifiable {
@@ -16,3 +17,4 @@ extension CLLocationCoordinate2D: @retroactive Equatable {
         lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
     }
 }
+#endif
