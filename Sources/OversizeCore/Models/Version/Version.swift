@@ -3,6 +3,7 @@
 // Version.swift, created on 20.04.2026
 //
 
+<<<<<<< HEAD
 public struct Version: Sendable {
     public let major: Int
     public let minor: Int?
