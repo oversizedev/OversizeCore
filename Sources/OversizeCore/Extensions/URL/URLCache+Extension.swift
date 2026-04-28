@@ -4,8 +4,6 @@
 //
 
 import Foundation
-#if canImport(FoundationNetworking)
-import FoundationNetworking
 
 #if !os(Linux)
 public extension URLCache {
