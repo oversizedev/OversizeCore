@@ -67,7 +67,7 @@ extension LoadingState: Equatable where Result: Equatable {
     }
 }
 
-extension LoadingState {
+public extension LoadingState {
     @available(*, deprecated, message: "Use error instead", renamed: "error")
     var failureError: Error? {
         error

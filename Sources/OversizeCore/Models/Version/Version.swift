@@ -5,7 +5,7 @@
 
 import Foundation
 
-public struct Version: Comparable, Equatable, Sendable {
+public struct Version: Comparable, Sendable {
     public let major: Int
     public let minor: Int
     public let patch: Int?
@@ -17,8 +17,9 @@ public struct Version: Comparable, Equatable, Sendable {
     }
 
     public init?(_ version: String) {
-        let parts = version.split(separator: ".").compactMap { Int($0) }
-        guard parts.count >= 2 else { return nil }
+        let segments = version.split(separator: ".")
+        let parts = segments.compactMap { Int($0) }
+        guard parts.count == segments.count, parts.count >= 2 else { return nil }
         major = parts[0]
         minor = parts[1]
         patch = parts.count > 2 ? parts[2] : nil
@@ -64,6 +65,12 @@ public struct Version: Comparable, Equatable, Sendable {
 
     public func incrementPatch() -> Version {
         Version(major, minor, (patch ?? 0) + 1)
+    }
+}
+
+extension Version: Equatable {
+    public static func == (lhs: Version, rhs: Version) -> Bool {
+        lhs.major == rhs.major && lhs.minor == rhs.minor && (lhs.patch ?? 0) == (rhs.patch ?? 0)
     }
 }
 
