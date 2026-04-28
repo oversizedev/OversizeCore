@@ -44,8 +44,7 @@ public extension String {
     /// ```
     var isEmail: Bool {
         let regEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}"
-        let predicate: NSPredicate = .init(format: "SELF MATCHES %@", regEx)
-        return predicate.evaluate(with: self)
+        return matches(regEx)
     }
 
     /// Validates if the string is a properly formatted URL.
@@ -64,8 +63,7 @@ public extension String {
     /// ```
     var isURL: Bool {
         let regEx = "http[s]?://(([^/:.[:space:]]+(.[^/:.[:space:]]+)*)|([0-9](.[0-9]{3})))(:[0-9]+)?((/[^?#[:space:]]+)([^#[:space:]]+)?(#.+)?)?"
-        let predicate = NSPredicate(format: "SELF MATCHES %@", argumentArray: [regEx])
-        return predicate.evaluate(with: self)
+        return matches(regEx)
     }
 
     /// Validates if the string contains only alphabetic characters and underscores.
@@ -84,8 +82,14 @@ public extension String {
     /// ```
     var isAlphabet: Bool {
         let regEx = "[A-Za-z_]*"
-        let predicate: NSPredicate = .init(format: "SELF MATCHES %@", regEx)
-        return predicate.evaluate(with: self)
+        return matches(regEx)
+    }
+
+    private func matches(_ regEx: String) -> Bool {
+        guard let expression = try? NSRegularExpression(pattern: regEx) else { return false }
+
+        let range = NSRange(startIndex..<endIndex, in: self)
+        return expression.firstMatch(in: self, range: range)?.range == range
     }
 
     /// Returns a URL-encoded version of the string.
