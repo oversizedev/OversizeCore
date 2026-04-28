@@ -9,13 +9,10 @@ import UIKit
 
 public extension UIView {
     var renderedImage: UIImage {
-        let rect = bounds
-        UIGraphicsBeginImageContextWithOptions(rect.size, false, 0.0)
-        let context: CGContext = UIGraphicsGetCurrentContext()!
-        layer.render(in: context)
-        let capturedImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        return capturedImage
+        let renderer = UIGraphicsImageRenderer(size: bounds.size)
+        return renderer.image { context in
+            layer.render(in: context.cgContext)
+        }
     }
 }
 

@@ -3,7 +3,9 @@
 // Coordinate2DData.swift, created on 13.06.2024
 //
 
+#if canImport(MapKit)
 import MapKit
+#endif
 
 public struct Coordinate2DData: Codable {
     public let latitude: Double
@@ -13,13 +15,17 @@ public struct Coordinate2DData: Codable {
         self.latitude = latitude
         self.longitude = longitude
     }
+}
 
-    public init(_ location: CLLocationCoordinate2D) {
+#if canImport(MapKit)
+public extension Coordinate2DData {
+    init(_ location: CLLocationCoordinate2D) {
         latitude = location.latitude
         longitude = location.longitude
     }
 
-    public var location: CLLocationCoordinate2D {
+    var location: CLLocationCoordinate2D {
         CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
 }
+#endif

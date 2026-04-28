@@ -3,6 +3,7 @@
 // Color+Extension.swift
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 
 // MARK: - Color Component Manipulation (iOS Only)
@@ -107,6 +108,69 @@ public extension Color {
               blue: min(Double(components.blue + percentage / 100), 1.0),
               opacity: Double(components.opacity))
     }
+
+    /// The WCAG relative luminance of the color in the range `0...1`.
+    ///
+    /// sRGB components are first linearised (gamma-expanded) and then combined
+    /// with the standard photometric weights (0.2126·R + 0.7152·G + 0.0722·B).
+    /// Use this when you need a perceptually accurate brightness value — for
+    /// example to compute contrast ratios against black or white.
+    ///
+    /// - Returns: Relative luminance from `0.0` (black) to `1.0` (white).
+    ///
+    /// - Note: This property is only available on iOS. It assumes an opaque
+    ///   sRGB color; alpha is ignored and dynamic/semantic colors should be
+    ///   resolved against a `UITraitCollection` before use.
+    var relativeLuminance: CGFloat {
+        let c = components
+        func linearise(_ channel: CGFloat) -> CGFloat {
+            channel <= 0.03928 ? channel / 12.92 : pow((channel + 0.055) / 1.055, 2.4)
+        }
+        return 0.2126 * linearise(c.red) + 0.7152 * linearise(c.green) + 0.0722 * linearise(c.blue)
+    }
+
+    /// Indicates whether the color is perceptually light.
+    ///
+    /// Compares the color's WCAG `relativeLuminance` to the standard
+    /// `0.179` threshold — the point where black and white foregrounds
+    /// produce an equal contrast ratio. Colors above this threshold
+    /// read better with black text, colors below with white.
+    ///
+    /// - Returns: `true` if black foreground has higher contrast, `false` otherwise.
+    ///
+    /// Example:
+    /// ```swift
+    /// Color.yellow.isLight // true
+    /// Color.blue.isLight   // false
+    /// ```
+    ///
+    /// - Note: This property is only available on iOS.
+    var isLight: Bool {
+        relativeLuminance > 0.179
+    }
+
+    /// Returns a contrasting foreground color (black or white) for this background.
+    ///
+    /// Mirrors the iOS 26 adaptive title behaviour where text on a tinted
+    /// Liquid Glass surface automatically picks the readable variant based on
+    /// the underlying fill brightness.
+    ///
+    /// - Returns: `.black` for light backgrounds, `.white` for dark backgrounds.
+    ///   Pass an opaque sRGB color — translucent or dynamic colors should be
+    ///   composited/resolved by the caller first.
+    ///
+    /// Example:
+    /// ```swift
+    /// Text("Title")
+    ///     .foregroundStyle(background.contrastingColor)
+    ///     .padding()
+    ///     .background(background)
+    /// ```
+    ///
+    /// - Note: This property is only available on iOS.
+    var contrastingColor: Color {
+        isLight ? .black : .white
+    }
 }
 #endif
 
@@ -143,3 +207,4 @@ public extension Color {
         )
     }
 }
+#endif

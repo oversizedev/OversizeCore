@@ -6,3 +6,7 @@ xcuserdata/
 DerivedData/
 .swiftpm
 .netrc
+/AGENTS.md
+/CLAUDE.md
+/build
+/.claude

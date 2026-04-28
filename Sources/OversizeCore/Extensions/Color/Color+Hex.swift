@@ -3,6 +3,7 @@
 // Color+Hex.swift
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 #if canImport(UIKit)
 import UIKit
@@ -215,3 +216,4 @@ struct Hex_Preview: PreviewProvider {
             .foregroundColor(green)
     }
 }
+#endif

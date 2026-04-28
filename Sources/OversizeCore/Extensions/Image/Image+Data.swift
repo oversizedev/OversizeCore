@@ -3,6 +3,7 @@
 // Image+Data.swift, created on 27.06.2024
 //
 
+#if canImport(SwiftUI)
 #if canImport(UIKit)
 import UIKit
 #elseif canImport(AppKit)
@@ -29,3 +30,4 @@ public extension Image {
         #endif
     }
 }
+#endif

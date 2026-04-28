@@ -31,30 +31,10 @@ public extension LoadingState {
         }
     }
 
-    @available(*, deprecated, message: "Use result instead", renamed: "result")
-    var successResult: Result? {
-        switch self {
-        case let .result(result):
-            result
-        default:
-            nil
-        }
-    }
-
     var result: Result? {
         switch self {
         case let .result(result):
             result
-        default:
-            nil
-        }
-    }
-
-    @available(*, deprecated, message: "Use error instead", renamed: "error")
-    var failureError: Error? {
-        switch self {
-        case let .error(error):
-            error
         default:
             nil
         }
@@ -80,9 +60,21 @@ extension LoadingState: Equatable where Result: Equatable {
         case let (.result(lhsResult), .result(rhsResult)):
             lhsResult == rhsResult
         case let (.error(lhsError), .error(rhsError)):
-            lhsError.localizedDescription == rhsError.localizedDescription
+            (lhsError as NSError).domain == (rhsError as NSError).domain && (lhsError as NSError).code == (rhsError as NSError).code
         default:
             false
         }
+    }
+}
+
+public extension LoadingState {
+    @available(*, deprecated, message: "Use error instead", renamed: "error")
+    var failureError: Error? {
+        error
+    }
+
+    @available(*, deprecated, message: "Use result instead", renamed: "result")
+    var successResult: Result? {
+        result
     }
 }
