@@ -53,6 +53,18 @@ public struct Version: Comparable, Equatable, Sendable {
     public var isPatch: Bool {
         (patch ?? 0) != 0
     }
+
+    public func incrementMajor() -> Version {
+        Version(major + 1, 0, 0)
+    }
+
+    public func incrementMinor() -> Version {
+        Version(major, minor + 1, 0)
+    }
+
+    public func incrementPatch() -> Version {
+        Version(major, minor, (patch ?? 0) + 1)
+    }
 }
 
 extension Version: CustomStringConvertible {

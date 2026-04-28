@@ -1,6 +1,6 @@
 //
 // Copyright © 2024 Alexander Romanov
-// File.swift, created on 27.11.2024
+// ResultExtension.swift, created on 27.11.2024
 //
 
 import Foundation
