@@ -88,7 +88,7 @@ public extension String {
     private func matches(_ regEx: String) -> Bool {
         guard let expression = try? NSRegularExpression(pattern: regEx) else { return false }
 
-        let range = NSRange(startIndex..<endIndex, in: self)
+        let range = NSRange(startIndex ..< endIndex, in: self)
         return expression.firstMatch(in: self, range: range)?.range == range
     }
 
