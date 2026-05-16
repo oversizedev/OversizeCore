@@ -207,6 +207,15 @@ private func hexIntFromColorComponents(rgba components: ColorComponentsRGBA) -> 
     return Int(r * 255) << 24 | Int(g * 255) << 16 | Int(b * 255) << 8 | Int(a * 255) << 0
 }
 
+// MARK: - ExpressibleByStringLiteral
+
+extension Color: @retroactive ExpressibleByStringLiteral {
+    public init(stringLiteral value: String) {
+        let clean = value.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        self = [3, 6, 8].contains(clean.count) ? Color(hex: value) : .black
+    }
+}
+
 struct Hex_Preview: PreviewProvider {
     static var previews: some View {
         let green: Color = .init(hex: "#00FF00")

@@ -385,6 +385,12 @@ public func logSuccess(_ text: String, object: Any?) {
     #endif
 }
 
+@inlinable public func logCloud(_ text: String) {
+    #if DEBUG
+    print("☁️ [CLOUD] \(text)")
+    #endif
+}
+
 /// Logs a data-related message with data category prefix in debug builds.
 ///
 /// This function is used for logging data operations, database activities,

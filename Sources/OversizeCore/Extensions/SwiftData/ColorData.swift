@@ -6,7 +6,7 @@
 #if canImport(SwiftUI)
 import SwiftUI
 
-public struct ColorData: Codable, Sendable {
+public struct ColorData: Codable, Equatable, Hashable, Sendable {
     private var red: Double = 1
     private var green: Double = 1
     private var blue: Double = 1
@@ -41,6 +41,15 @@ public struct ColorData: Codable, Sendable {
         if components.count > 3 {
             opacity = Double(components[3])
         }
+    }
+}
+
+// MARK: - ExpressibleByStringLiteral
+
+extension ColorData: ExpressibleByStringLiteral {
+    public init(stringLiteral value: String) {
+        let clean = value.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        self.init(color: [3, 6, 8].contains(clean.count) ? Color(hex: value) : .black)
     }
 }
 #endif

@@ -58,3 +58,12 @@ public extension Locale.Currency {
             .sorted { $0.displayName ?? "" < $1.displayName ?? "" }
     }
 }
+
+// MARK: - ExpressibleByStringLiteral
+
+@available(macOS 13, iOS 16, tvOS 16, watchOS 9, *)
+extension Locale.Currency: @retroactive ExpressibleByStringLiteral {
+    public init(stringLiteral value: String) {
+        self.init(value)
+    }
+}
