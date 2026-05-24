@@ -15,7 +15,7 @@ public struct Version: Sendable {
         _ minor: Int? = nil,
         _ patch: Int? = nil,
         prereleaseIdentifiers: [String] = [],
-        buildMetadataIdentifiers: [String] = []
+        buildMetadataIdentifiers: [String] = [],
     ) {
         precondition(major >= 0, "major must be non-negative")
         if let minor { precondition(minor >= 0, "minor must be non-negative") }
@@ -75,7 +75,7 @@ extension Version: LosslessStringConvertible {
             minorValue,
             patchValue,
             prereleaseIdentifiers: prerelease,
-            buildMetadataIdentifiers: buildMetadata
+            buildMetadataIdentifiers: buildMetadata,
         )
     }
 
@@ -199,9 +199,9 @@ public extension Version {
 
     func nextPatch() -> Version {
         if prereleaseIdentifiers.isEmpty {
-            return Version(major, minor ?? 0, (patch ?? 0) + 1)
+            Version(major, minor ?? 0, (patch ?? 0) + 1)
         } else {
-            return Version(major, minor ?? 0, patch ?? 0, prereleaseIdentifiers: prereleaseIdentifiers + ["0"])
+            Version(major, minor ?? 0, patch ?? 0, prereleaseIdentifiers: prereleaseIdentifiers + ["0"])
         }
     }
 }

@@ -3,12 +3,12 @@
 // VersionTests.swift
 //
 
-import Testing
 @testable import OversizeCore
+import Testing
 
 // MARK: - Init
 
-@Suite struct VersionInitTests {
+struct VersionInitTests {
     @Test func positionalArgs_storesAllComponents() {
         let version = Version(1, 2, 3)
         #expect(version.major == 1)
@@ -41,7 +41,7 @@ import Testing
 
 // MARK: - Parsing
 
-@Suite struct VersionParsingTests {
+struct VersionParsingTests {
     @Test func fullVersionString_parsesAllComponents() {
         let version: Version = "1.0.0"
         #expect(version.major == 1)
@@ -82,44 +82,44 @@ import Testing
     // Failable init tests — use String variables to bypass ExpressibleByStringLiteral
 
     @Test func nonNumericString_returnsNil() {
-        let str: String = "abc"
+        let str = "abc"
         #expect(Version(str) == nil)
     }
 
     @Test func emptyString_returnsNil() {
-        let str: String = ""
+        let str = ""
         #expect(Version(str) == nil)
     }
 
     @Test func fourComponentString_returnsNil() {
-        let str: String = "1.2.3.4"
+        let str = "1.2.3.4"
         #expect(Version(str) == nil)
     }
 
     @Test func negativeMajor_returnsNil() {
-        let str: String = "-1.0.0"
+        let str = "-1.0.0"
         #expect(Version(str) == nil)
     }
 
     @Test func emptyPrereleaseSection_returnsNil() {
-        let str: String = "1.2.3-"
+        let str = "1.2.3-"
         #expect(Version(str) == nil)
     }
 
     @Test func emptyBuildMetadataSection_returnsNil() {
-        let str: String = "1.2.3+"
+        let str = "1.2.3+"
         #expect(Version(str) == nil)
     }
 
     @Test func doubleDotInPrerelease_returnsNil() {
-        let str: String = "1.2.3-alpha..1"
+        let str = "1.2.3-alpha..1"
         #expect(Version(str) == nil)
     }
 }
 
 // MARK: - description
 
-@Suite struct VersionDescriptionTests {
+struct VersionDescriptionTests {
     @Test func majorOnly_returnsSingleComponent() {
         #expect(Version(1).description == "1")
     }
@@ -156,7 +156,7 @@ import Testing
 
 // MARK: - Hashable
 
-@Suite struct VersionHashableTests {
+struct VersionHashableTests {
     @Test func equalVersions_haveSameHash() {
         #expect(Version(1).hashValue == Version(1, 0).hashValue)
         #expect(Version(1, 0).hashValue == Version(1, 0, 0).hashValue)
@@ -189,7 +189,7 @@ import Testing
 
 // MARK: - Equatable
 
-@Suite struct VersionEquatableTests {
+struct VersionEquatableTests {
     @Test func nilMinorEqualsZeroMinor() {
         #expect(Version(1) == Version(1, 0))
     }
@@ -213,7 +213,7 @@ import Testing
 
 // MARK: - Comparable
 
-@Suite struct VersionComparableTests {
+struct VersionComparableTests {
     @Test func lowerMajor_isLess() {
         #expect(Version(1, 0) < Version(2, 0))
     }
@@ -247,16 +247,16 @@ import Testing
     }
 
     @Test func numericIdentifierComparedNumerically() throws {
-        let s2: String = "1.0.0-beta.2"
-        let s11: String = "1.0.0-beta.11"
+        let s2 = "1.0.0-beta.2"
+        let s11 = "1.0.0-beta.11"
         let v2 = try #require(Version(s2))
         let v11 = try #require(Version(s11))
         #expect(v2 < v11)
     }
 
     @Test func numericIdentifierLessThanAlphanumeric() throws {
-        let sNumeric: String = "1.0.0-1"
-        let sAlpha: String = "1.0.0-alpha"
+        let sNumeric = "1.0.0-1"
+        let sAlpha = "1.0.0-alpha"
         let numeric = try #require(Version(sNumeric))
         let alpha = try #require(Version(sAlpha))
         #expect(numeric < alpha)
@@ -272,7 +272,7 @@ import Testing
 
 // MARK: - Helper properties
 
-@Suite struct VersionHelperTests {
+struct VersionHelperTests {
     @Test func isFirstVersion_version100_returnsTrue() {
         #expect(Version(1, 0, 0).isFirstVersion)
     }
@@ -300,7 +300,7 @@ import Testing
 
 // MARK: - Increment
 
-@Suite struct VersionIncrementTests {
+struct VersionIncrementTests {
     @Test func nextMajor_returnsNextMajor() {
         #expect(Version(1, 0, 0).nextMajor().description == "2")
     }
@@ -325,7 +325,7 @@ import Testing
 
 // MARK: - Range extensions
 
-@Suite struct VersionRangeTests {
+struct VersionRangeTests {
     @Test func upToNextMajor_containsVersionsBeforeNextMajor() {
         let range = Range<Version>.upToNextMajor(from: Version(1, 2, 3))
         #expect(range.contains(Version(1, 9, 9)))
