@@ -54,7 +54,7 @@ public func delay(_ time: ContinuousClock.Duration, action: @Sendable @escaping 
         try await Task.sleep(for: time)
         await action()
     } catch {
-        logError("Delay function failed", error: error)
+        Log.error("Delay function failed", error: error)
     }
 }
 
@@ -83,7 +83,7 @@ public func delayMain(_ time: ContinuousClock.Duration, action: @MainActor @Send
         try await Task.sleep(for: time)
         await action()
     } catch {
-        logError("DelayMain function failed", error: error)
+        Log.error("DelayMain function failed", error: error)
     }
 }
 
@@ -114,7 +114,7 @@ public func delayDetached(_ time: ContinuousClock.Duration, action: @Sendable @e
             try await Task.sleep(for: time)
             action()
         } catch {
-            logError("DelayDetached function failed", error: error)
+            Log.error("DelayDetached function failed", error: error)
         }
     }
 }
