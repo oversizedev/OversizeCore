@@ -1,3 +1,8 @@
+//
+// Copyright © 2026 Alexander Romanov
+// Font.TextStyle+Extension.swift
+//
+
 import SwiftUI
 
 public extension Font.TextStyle {

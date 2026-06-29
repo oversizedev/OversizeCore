@@ -266,7 +266,7 @@ struct VersionComparableTests {
         let v01 = Version(1, 0, 0, prereleaseIdentifiers: ["01"])
         let v1 = Version(1, 0, 0, prereleaseIdentifiers: ["1"])
         #expect(v01 != v1)
-        #expect(v01 < v1 || v1 < v01)
+        #expect(v01 < v1)
     }
 }
 
@@ -302,7 +302,7 @@ struct VersionHelperTests {
 
 struct VersionIncrementTests {
     @Test func nextMajor_returnsNextMajor() {
-        #expect(Version(1, 0, 0).nextMajor().description == "2")
+        #expect(Version(1, 0, 0).nextMajor().description == "2.0")
     }
 
     @Test func nextMinor_returnsNextMinor() {

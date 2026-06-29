@@ -8,10 +8,6 @@ import OSLog
 // MARK: - Log
 
 public enum Log {
-    public static func log(_ message: String) {
-        Logger.general.debug("\(message, privacy: .public)")
-    }
-
     public static func trace(_ message: String) {
         Logger.general.trace("\(message, privacy: .public)")
     }

@@ -191,7 +191,7 @@ public extension Version {
     }
 
     func nextMajor() -> Version {
-        Version(major + 1)
+        Version(major + 1, 0)
     }
 
     func nextMinor() -> Version {

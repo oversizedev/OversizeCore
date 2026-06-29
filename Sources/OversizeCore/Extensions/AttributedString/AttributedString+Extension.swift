@@ -3,6 +3,7 @@
 // AttributedString+Extension.swift, created on 02.06.2026
 //
 
+#if canImport(SwiftUI)
 import Foundation
 import SwiftUI
 #if canImport(UIKit)
@@ -114,3 +115,4 @@ public extension AttributedString {
         return text.isEmpty ? nil : text
     }
 }
+#endif
