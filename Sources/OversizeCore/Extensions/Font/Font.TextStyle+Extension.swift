@@ -3,6 +3,7 @@
 // Font.TextStyle+Extension.swift
 //
 
+#if canImport(SwiftUI)
 import SwiftUI
 
 public extension Font.TextStyle {
@@ -23,3 +24,4 @@ public extension Font.TextStyle {
         }
     }
 }
+#endif

@@ -3,6 +3,7 @@
 // LogGlobal.swift
 //
 
+#if canImport(OSLog)
 import OSLog
 
 // MARK: - Basic Logging
@@ -146,3 +147,54 @@ public func logUrl(_ text: String? = nil, url: URL?, terminator _: String? = nil
         }
     }
 }
+#else
+import Foundation
+
+@available(*, deprecated, renamed: "Log.debug")
+public func log(_ objects: Any...) { print(objects.map { "\($0)" }.joined(separator: ", ")) }
+@available(*, deprecated, renamed: "Log.debug")
+public func log(_ object: Any?) { print(object.map { "\($0)" } ?? "nil") }
+@available(*, deprecated, renamed: "Log.debug")
+public func log(_ text: String, terminator _: String? = nil) { print(text) }
+@available(*, deprecated, renamed: "Log.debug")
+public func logWithTime(_ text: String, terminator _: String? = nil) { print("🕓 \(text)") }
+@available(*, deprecated, renamed: "Log.debug")
+public func logDebug(_ text: String, terminator _: String? = nil) { print("⚪ [DEBUG] \(text)") }
+@available(*, deprecated, message: "Use Log.debug(_:) instead")
+public func logUI(_ text: String, terminator _: String? = nil) { print("🖥️ [UI] \(text)") }
+@available(*, deprecated, renamed: "Log.notice")
+public func logNotice(_ text: String, terminator _: String? = nil) { print("🛎️ [NOTICE] \(text)") }
+@available(*, deprecated, message: "Use Log.debug(_:) instead")
+public func logNetwork(_ text: String, terminator _: String? = nil) { print("🌎 [NETWORK] \(text)") }
+@available(*, deprecated, renamed: "Log.info")
+public func logInfo(_ text: String, terminator _: String? = nil) { print("ℹ️ [INFO] \(text)") }
+@available(*, deprecated, message: "Use Log.notice(_:) instead")
+public func logSecurity(_ text: String, terminator _: String? = nil) { print("🔐 [SECURITY] \(text)") }
+@_disfavoredOverload
+@available(*, deprecated, renamed: "Log.info")
+public func logSuccess(_ text: String, terminator _: String? = nil) { print("✅ [SUCCESS] \(text)") }
+@available(*, deprecated, renamed: "Log.info")
+public func logSuccess(_ text: String, object: Any?) { print("✅ [SUCCESS] \(text), object:\n\(String(describing: object))") }
+@available(*, deprecated, renamed: "Log.warning")
+public func logWarning(_ text: String, terminator _: String? = nil) { print("⚠️ [WARNING] \(text)") }
+@available(*, deprecated, renamed: "Log.error")
+public func logError(_ text: String, terminator _: String? = nil) { print("🔴 [ERROR] \(text)") }
+@available(*, deprecated, renamed: "Log.error(_:error:)")
+public func logError(_ text: String, error: Error, terminator _: String? = nil) { print("🔴 [ERROR] \(text):\n\(error.localizedDescription)\n\(error)") }
+@available(*, deprecated, renamed: "Log.error(_:error:)")
+public func logError(_ text: String, _ error: Error, terminator: String? = nil) { logError(text, error: error, terminator: terminator) }
+@available(*, deprecated, renamed: "Log.error")
+public func logError(_ text: String, error: String, terminator _: String? = nil) { print("🔴 [ERROR] \(text):\n\(error)") }
+@available(*, deprecated, message: "Use Log.info(_:) instead")
+public func logDeleted(_ text: String, terminator _: String? = nil) { print("🗑️ [DELETED] \(text)") }
+@available(*, deprecated, message: "Use Log.debug(_:) instead")
+public func logCloud(_ text: String) { print("☁️ [CLOUD] \(text)") }
+@available(*, deprecated, message: "Use Log.debug(_:) instead")
+public func logData(_ text: String, terminator _: String? = nil) { print("💽 [DATA] \(text)") }
+@available(*, deprecated, message: "Use Log.debug(_:url:) instead")
+public func logUrl(_ text: String? = nil, url: URL?, terminator _: String? = nil) {
+    guard let url else { print("🔗 [URL] Nil or not valid URL"); return }
+    let prefix = text.map { "\($0):\n" } ?? ""
+    print(url.isFileURL ? "📁 [URL] \(prefix)\(url.path)" : "🌐 [URL] \(prefix)\(url.absoluteString)")
+}
+#endif

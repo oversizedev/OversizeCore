@@ -3,6 +3,7 @@
 // Log.swift
 //
 
+#if canImport(OSLog)
 import OSLog
 
 // MARK: - Log
@@ -96,3 +97,35 @@ public extension Log {
         }
     }
 }
+#else
+import Foundation
+
+// MARK: - Log (Linux fallback)
+
+public enum Log {
+    public static func trace(_ message: String) { print("[TRACE] \(message)") }
+    public static func debug(_ message: String) { print("[DEBUG] \(message)") }
+    public static func debug(_ items: Any..., separator: String = " ") { print("[DEBUG] \(items.map { "\($0)" }.joined(separator: separator))") }
+    public static func info(_ message: String) { print("[INFO] \(message)") }
+    public static func notice(_ message: String) { print("[NOTICE] \(message)") }
+    public static func warning(_ message: String) { print("[WARNING] \(message)") }
+    public static func error(_ message: String) { print("[ERROR] \(message)") }
+    public static func error(_ message: String, error: Error) { print("[ERROR] \(message):\n\(error.localizedDescription)\n\(error)") }
+    public static func critical(_ message: String) { print("[CRITICAL] \(message)") }
+    public static func fault(_ message: String) { print("[FAULT] \(message)") }
+}
+
+public extension Log {
+    static func ui(_ message: String) { print("[UI] \(message)") }
+    static func network(_ message: String) { print("[NETWORK] \(message)") }
+    static func security(_ message: String) { print("[SECURITY] \(message)") }
+    static func debug(_ message: String?, url: URL?) {
+        guard let url else { print("[URL] Not valid URL"); return }
+        print("[URL] \(message.map { "\($0): " } ?? "")\(url.absoluteString)")
+    }
+    static func debug(url: URL?) {
+        guard let url else { print("[URL] Not valid URL"); return }
+        print("[URL] \(url.absoluteString)")
+    }
+}
+#endif

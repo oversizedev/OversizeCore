@@ -3,6 +3,7 @@
 // LoggerInstances.swift
 //
 
+#if canImport(OSLog)
 import OSLog
 
 // MARK: - Internal Logger Instances
@@ -18,3 +19,4 @@ extension Logger {
     static let url = Logger(subsystem: subsystem, category: "URL")
     static let errorLog = Logger(subsystem: subsystem, category: "Error")
 }
+#endif

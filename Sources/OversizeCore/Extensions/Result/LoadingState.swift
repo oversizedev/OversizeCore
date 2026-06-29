@@ -60,7 +60,7 @@ extension LoadingState: Equatable where Result: Equatable {
         case let (.result(lhsResult), .result(rhsResult)):
             lhsResult == rhsResult
         case let (.error(lhsError), .error(rhsError)):
-            (lhsError as NSError).domain == (rhsError as NSError).domain && (lhsError as NSError).code == (rhsError as NSError).code
+            lhsError.localizedDescription == rhsError.localizedDescription
         default:
             false
         }
