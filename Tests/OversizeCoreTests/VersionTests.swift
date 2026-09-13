@@ -321,6 +321,31 @@ struct VersionIncrementTests {
         let v = Version(1, 0, 0, prereleaseIdentifiers: ["beta", "1"])
         #expect(v.nextPatch().description == "1.0.0-beta.1.0")
     }
+
+    @Test func nextMajor_shortStyle_omitsPatch() {
+        #expect(Version(2, 0, 1).nextMajor().description == "3.0")
+    }
+
+    @Test func nextMajor_fullStyle_includesPatch() {
+        #expect(Version(2, 0, 1).nextMajor(.full).description == "3.0.0")
+    }
+
+    @Test func nextMinor_shortStyle_omitsPatch() {
+        #expect(Version(2, 0, 1).nextMinor().description == "2.1")
+    }
+
+    @Test func nextMinor_fullStyle_includesPatch() {
+        #expect(Version(2, 0, 1).nextMinor(.full).description == "2.1.0")
+    }
+
+    @Test func nextMinor_fromMajorOnly_fullStyle_returnsFullVersion() {
+        #expect(Version(2).nextMinor(.full).description == "2.1.0")
+    }
+
+    @Test func nextMajor_fromPrerelease_dropsIdentifiers() {
+        let v = Version(1, 2, 3, prereleaseIdentifiers: ["beta"])
+        #expect(v.nextMajor(.full).description == "2.0.0")
+    }
 }
 
 // MARK: - Range extensions
