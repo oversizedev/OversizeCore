@@ -48,7 +48,9 @@ public enum ServiceAPIKey: String, CaseIterable, Sendable {
 ///
 /// A stored key always wins over `environmentVariable`, which stays as the development fallback
 /// injected by the Dev schemes. Values are cached in memory because the pipeline asks for the key
-/// on every request and a Keychain round trip per call is wasteful.
+/// on every request and a Keychain round trip per call is wasteful; every cache fill and every
+/// mutation runs under one lock, so a save from Settings cannot be overwritten by a read that
+/// started before it.
 public struct ServiceAPIKeyStorage: Sendable {
     public enum StorageError: Error {
         case encodingFailed
@@ -58,17 +60,14 @@ public struct ServiceAPIKeyStorage: Sendable {
     public static let shared = ServiceAPIKeyStorage()
     public static let service = "AppConnector.ServiceAPIKeys"
 
-    private static let cache = Cache()
+    private static let store = Store()
 
     public init() {}
 
     public func key(for key: ServiceAPIKey) -> String? {
-        if let cached = Self.cache.value(for: key) {
-            return cached.flatMap { $0.isEmpty ? nil : $0 } ?? environmentKey(for: key)
+        guard let stored = storedKey(key), !stored.isEmpty else {
+            return environmentKey(for: key)
         }
-        let stored = Self.isTestProcess ? nil : keychainValue(for: key)
-        Self.cache.store(stored, for: key)
-        guard let stored, !stored.isEmpty else { return environmentKey(for: key) }
         return stored
     }
 
@@ -77,60 +76,72 @@ public struct ServiceAPIKeyStorage: Sendable {
     }
 
     public func isStored(_ key: ServiceAPIKey) -> Bool {
-        guard !Self.isTestProcess else { return false }
-        if let cached = Self.cache.value(for: key) {
-            return cached?.isEmpty == false
-        }
-        let stored = keychainValue(for: key)
-        Self.cache.store(stored, for: key)
-        return stored?.isEmpty == false
+        storedKey(key)?.isEmpty == false
+    }
+
+    /// Whether the resolved key comes from the environment rather than the Keychain — Settings
+    /// shows it so a developer does not wonder why a service works with an empty field.
+    public func isFromEnvironment(_ key: ServiceAPIKey) -> Bool {
+        !isStored(key) && environmentKey(for: key) != nil
     }
 
     public func save(_ value: String, for key: ServiceAPIKey) throws {
         let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
-            delete(key)
+            try delete(key)
             return
         }
         guard let data = trimmed.data(using: .utf8) else {
             throw StorageError.encodingFailed
         }
 
-        var addQuery = baseQuery(for: key)
-        addQuery[kSecAttrAccessible] = kSecAttrAccessibleAfterFirstUnlock
-        addQuery[kSecValueData] = data
-
-        let addStatus = SecItemAdd(addQuery as CFDictionary, nil)
-        switch addStatus {
-        case errSecSuccess:
-            break
-        case errSecDuplicateItem:
-            let updateStatus = SecItemUpdate(
-                baseQuery(for: key) as CFDictionary,
-                [kSecValueData: data] as CFDictionary,
-            )
-            guard updateStatus == errSecSuccess else {
-                throw StorageError.keychain(updateStatus)
+        try Self.store.withLock { cache in
+            if !Self.isTestProcess {
+                try Self.write(data, for: key)
             }
-        default:
-            throw StorageError.keychain(addStatus)
+            cache[key] = .value(trimmed)
         }
-
-        Self.cache.store(trimmed, for: key)
     }
 
-    public func delete(_ key: ServiceAPIKey) {
-        SecItemDelete(baseQuery(for: key) as CFDictionary)
-        Self.cache.store(nil, for: key)
+    public func delete(_ key: ServiceAPIKey) throws {
+        try Self.store.withLock { cache in
+            if !Self.isTestProcess {
+                let status = SecItemDelete(Self.baseQuery(for: key) as CFDictionary)
+                guard status == errSecSuccess || status == errSecItemNotFound else {
+                    throw StorageError.keychain(status)
+                }
+            }
+            cache[key] = .missing
+        }
     }
 
-    public func deleteAll() {
+    public func deleteAll() throws {
         for key in ServiceAPIKey.allCases {
-            delete(key)
+            try delete(key)
         }
     }
 
     // MARK: - Private
+
+    /// The Keychain value, read through the cache. A read that fails for anything other than a
+    /// missing item is not cached: the Keychain is simply unavailable before first unlock, and a
+    /// negative cache entry would hide the key for the rest of the process lifetime.
+    private func storedKey(_ key: ServiceAPIKey) -> String? {
+        Self.store.withLock { cache in
+            if let cached = cache[key] { return cached.value }
+            guard !Self.isTestProcess else {
+                cache[key] = .missing
+                return nil
+            }
+            switch Self.keychainValue(for: key) {
+            case let .success(value):
+                cache[key] = value.map(CachedKey.value) ?? .missing
+                return value
+            case .failure:
+                return nil
+            }
+        }
+    }
 
     /// Development fallback only: the Dev schemes forward the keys from `Secrets.xcconfig`, while a
     /// TestFlight or App Store build must rely on what the user typed in Settings.
@@ -146,33 +157,57 @@ public struct ServiceAPIKeyStorage: Sendable {
         #endif
     }
 
-    /// Whether the resolved key comes from the environment rather than the Keychain — Settings
-    /// shows it so a developer does not wonder why a service works with an empty field.
-    public func isFromEnvironment(_ key: ServiceAPIKey) -> Bool {
-        !isStored(key) && environmentKey(for: key) != nil
+    private static func write(_ data: Data, for key: ServiceAPIKey) throws {
+        var addQuery = baseQuery(for: key)
+        addQuery[kSecAttrAccessible] = kSecAttrAccessibleAfterFirstUnlock
+        addQuery[kSecValueData] = data
+
+        let addStatus = SecItemAdd(addQuery as CFDictionary, nil)
+        switch addStatus {
+        case errSecSuccess:
+            return
+        case errSecDuplicateItem:
+            let updateStatus = SecItemUpdate(
+                baseQuery(for: key) as CFDictionary,
+                [kSecValueData: data] as CFDictionary,
+            )
+            guard updateStatus == errSecSuccess else {
+                throw StorageError.keychain(updateStatus)
+            }
+        default:
+            throw StorageError.keychain(addStatus)
+        }
     }
 
-    private func keychainValue(for key: ServiceAPIKey) -> String? {
+    private static func keychainValue(for key: ServiceAPIKey) -> Result<String?, StorageError> {
         var query = baseQuery(for: key)
         query[kSecReturnData] = kCFBooleanTrue
         query[kSecMatchLimit] = kSecMatchLimitOne
 
         var result: AnyObject?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
-        guard status == errSecSuccess, let data = result as? Data else { return nil }
-        return String(data: data, encoding: .utf8)
+        switch status {
+        case errSecSuccess:
+            guard let data = result as? Data else { return .success(nil) }
+            return .success(String(data: data, encoding: .utf8))
+        case errSecItemNotFound:
+            return .success(nil)
+        default:
+            return .failure(.keychain(status))
+        }
     }
 
-    private func baseQuery(for key: ServiceAPIKey) -> [CFString: Any] {
+    private static func baseQuery(for key: ServiceAPIKey) -> [CFString: Any] {
         [
             kSecClass: kSecClassGenericPassword,
-            kSecAttrService: Self.service,
+            kSecAttrService: service,
             kSecAttrAccount: key.rawValue,
         ]
     }
 
     /// A test host has no Keychain entitlement on macOS and would answer every lookup with a
-    /// prompt or an error, so suites stay on the environment fallback only.
+    /// prompt or an error, so suites stay on the cache and the environment fallback only — writes
+    /// included, or a suite exercising Settings would mutate the host's real Keychain.
     private static var isTestProcess: Bool {
         if Bundle.main.bundleURL.pathExtension == "xctest" {
             return true
@@ -190,20 +225,26 @@ public struct ServiceAPIKeyStorage: Sendable {
 // MARK: - Cache
 
 private extension ServiceAPIKeyStorage {
-    final class Cache: @unchecked Sendable {
-        private let lock = NSLock()
-        private var values: [ServiceAPIKey: String?] = [:]
+    enum CachedKey {
+        case missing
+        case value(String)
 
-        func value(for key: ServiceAPIKey) -> String?? {
-            lock.lock()
-            defer { lock.unlock() }
-            return values[key]
+        var value: String? {
+            switch self {
+            case .missing: nil
+            case let .value(value): value
+            }
         }
+    }
 
-        func store(_ value: String?, for key: ServiceAPIKey) {
+    final class Store: @unchecked Sendable {
+        private let lock = NSLock()
+        private var cache: [ServiceAPIKey: CachedKey] = [:]
+
+        func withLock<Value>(_ body: (inout [ServiceAPIKey: CachedKey]) throws -> Value) rethrows -> Value {
             lock.lock()
             defer { lock.unlock() }
-            values[key] = value
+            return try body(&cache)
         }
     }
 }
