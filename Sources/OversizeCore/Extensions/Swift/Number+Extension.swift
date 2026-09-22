@@ -44,14 +44,15 @@ public extension Int {
     ///   - Numbers ending in 1 (except 11) use singular form (index 0)
     ///   - Numbers ending in 2-4 (except 12-14) use few form (index 1)
     ///   - All other numbers use many form (index 2)
+    ///   - Negative numbers use the same form as their absolute value
     func wordFormat(titles: [String]) -> String {
         let cases = [2, 0, 1, 1, 1, 2]
 
-        let x = self % 100
+        let x = magnitude % 100
         if x > 4, x < 20 {
             return titles[2]
         } else {
-            let y = self % 10
+            let y = Int(magnitude % 10)
             let minimum = Swift.min(y, 5)
             let c = cases[minimum]
             return titles[c]

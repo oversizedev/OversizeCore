@@ -20,13 +20,13 @@ public extension NSImage {
 }
 
 public extension NSImage {
-    func jpegData(compressionQuality _: CGFloat) -> Data? {
+    func jpegData(compressionQuality: CGFloat) -> Data? {
         guard let cgImage = cgImage(forProposedRect: nil, context: nil, hints: nil) else {
             return nil
         }
 
         let bitmapRepresentation = NSBitmapImageRep(cgImage: cgImage)
-        return bitmapRepresentation.representation(using: .jpeg, properties: [:])
+        return bitmapRepresentation.representation(using: .jpeg, properties: [.compressionFactor: compressionQuality])
     }
 
     func jpegData() -> Data? {

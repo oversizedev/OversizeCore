@@ -128,7 +128,7 @@ private extension Double {
 
 extension ColorData: ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
-        let clean = value.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        let clean = hexDigits(of: value)
         self.init(color: [3, 6, 8].contains(clean.count) ? Color(hex: value) : .black)
     }
 }

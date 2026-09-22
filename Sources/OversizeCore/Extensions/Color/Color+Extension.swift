@@ -6,9 +6,14 @@
 #if canImport(SwiftUI)
 import SwiftUI
 
-// MARK: - Color Component Manipulation (iOS Only)
+#if canImport(UIKit)
+import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
-#if os(iOS)
+// MARK: - Color Component Manipulation
+
 // swiftlint:disable large_tuple
 
 public extension Color {
@@ -27,23 +32,25 @@ public extension Color {
     /// // Output: Red: 1.0, Green: 0.0
     /// ```
     ///
-    /// - Note: This property is only available on iOS. Returns (0, 0, 0, 0) if component extraction fails.
+    /// - Note: Returns (0, 0, 0, 0) if component extraction fails.
     var components: (red: CGFloat, green: CGFloat, blue: CGFloat, opacity: CGFloat) {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var opacity: CGFloat = 0
+
         #if canImport(UIKit)
-        typealias NativeColor = UIColor
-        #elseif canImport(AppKit)
-        typealias NativeColor = NSColor
-        #endif
-
-        var r: CGFloat = 0
-        var g: CGFloat = 0
-        var b: CGFloat = 0
-        var o: CGFloat = 0
-
-        guard NativeColor(self).getRed(&r, green: &g, blue: &b, alpha: &o) else {
+        guard UIColor(self).getRed(&red, green: &green, blue: &blue, alpha: &opacity) else {
             return (0, 0, 0, 0)
         }
-        return (r, g, b, o)
+        #elseif canImport(AppKit)
+        guard let nativeColor = NSColor(self).usingColorSpace(.sRGB) else {
+            return (0, 0, 0, 0)
+        }
+        nativeColor.getRed(&red, green: &green, blue: &blue, alpha: &opacity)
+        #endif
+
+        return (red, green, blue, opacity)
     }
 
     /// Creates a lighter version of the color by the specified percentage.
@@ -61,7 +68,7 @@ public extension Color {
     /// let muchLighter = originalColor.lighter() // Uses default 30%
     /// ```
     ///
-    /// - Note: This function is only available on iOS. Values are clamped to prevent overflow.
+    /// - Note: Values are clamped to prevent overflow.
     func lighter(by percentage: CGFloat = 30.0) -> Color {
         adjust(by: abs(percentage))
     }
@@ -81,7 +88,7 @@ public extension Color {
     /// let muchDarker = originalColor.darker() // Uses default 30%
     /// ```
     ///
-    /// - Note: This function is only available on iOS. Values are clamped to prevent underflow.
+    /// - Note: Values are clamped to prevent underflow.
     func darker(by percentage: CGFloat = 30.0) -> Color {
         adjust(by: -1 * abs(percentage))
     }
@@ -101,12 +108,19 @@ public extension Color {
     /// let darker = baseColor.adjust(by: -20.0)  // Darker
     /// ```
     ///
-    /// - Note: This function is only available on iOS. RGB values are clamped between 0.0 and 1.0.
+    /// - Note: RGB values are clamped between 0.0 and 1.0.
     func adjust(by percentage: CGFloat = 30.0) -> Color {
-        Color(red: min(Double(components.red + percentage / 100), 1.0),
-              green: min(Double(components.green + percentage / 100), 1.0),
-              blue: min(Double(components.blue + percentage / 100), 1.0),
-              opacity: Double(components.opacity))
+        let components = components
+        let offset = percentage / 100
+        func adjusted(_ channel: CGFloat) -> Double {
+            Double(min(max(channel + offset, 0), 1))
+        }
+        return Color(
+            red: adjusted(components.red),
+            green: adjusted(components.green),
+            blue: adjusted(components.blue),
+            opacity: Double(components.opacity),
+        )
     }
 
     /// The WCAG relative luminance of the color in the range `0...1`.
@@ -118,15 +132,15 @@ public extension Color {
     ///
     /// - Returns: Relative luminance from `0.0` (black) to `1.0` (white).
     ///
-    /// - Note: This property is only available on iOS. It assumes an opaque
-    ///   sRGB color; alpha is ignored and dynamic/semantic colors should be
-    ///   resolved against a `UITraitCollection` before use.
+    /// - Note: It assumes an opaque sRGB color; alpha is ignored and
+    ///   dynamic/semantic colors should be resolved against the target
+    ///   appearance before use.
     var relativeLuminance: CGFloat {
-        let c = components
+        let components = components
         func linearise(_ channel: CGFloat) -> CGFloat {
             channel <= 0.03928 ? channel / 12.92 : pow((channel + 0.055) / 1.055, 2.4)
         }
-        return 0.2126 * linearise(c.red) + 0.7152 * linearise(c.green) + 0.0722 * linearise(c.blue)
+        return 0.2126 * linearise(components.red) + 0.7152 * linearise(components.green) + 0.0722 * linearise(components.blue)
     }
 
     /// Indicates whether the color is perceptually light.
@@ -143,8 +157,6 @@ public extension Color {
     /// Color.yellow.isLight // true
     /// Color.blue.isLight   // false
     /// ```
-    ///
-    /// - Note: This property is only available on iOS.
     var isLight: Bool {
         relativeLuminance > 0.179
     }
@@ -166,13 +178,10 @@ public extension Color {
     ///     .padding()
     ///     .background(background)
     /// ```
-    ///
-    /// - Note: This property is only available on iOS.
     var contrastingColor: Color {
         isLight ? .black : .white
     }
 }
-#endif
 
 // MARK: - Random Color Generation
 
