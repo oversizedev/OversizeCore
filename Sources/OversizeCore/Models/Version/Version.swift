@@ -18,8 +18,12 @@ public struct Version: Sendable {
         buildMetadataIdentifiers: [String] = [],
     ) {
         precondition(major >= 0, "major must be non-negative")
-        if let minor { precondition(minor >= 0, "minor must be non-negative") }
-        if let patch { precondition(patch >= 0, "patch must be non-negative") }
+        if let minor {
+            precondition(minor >= 0, "minor must be non-negative")
+        }
+        if let patch {
+            precondition(patch >= 0, "patch must be non-negative")
+        }
         self.major = major
         self.minor = minor
         self.patch = patch
@@ -144,9 +148,15 @@ extension Version: Comparable {
         let lhsComponents = (lhs.major, lhs.minor ?? 0, lhs.patch ?? 0)
         let rhsComponents = (rhs.major, rhs.minor ?? 0, rhs.patch ?? 0)
 
-        if lhsComponents.0 != rhsComponents.0 { return lhsComponents.0 < rhsComponents.0 }
-        if lhsComponents.1 != rhsComponents.1 { return lhsComponents.1 < rhsComponents.1 }
-        if lhsComponents.2 != rhsComponents.2 { return lhsComponents.2 < rhsComponents.2 }
+        if lhsComponents.0 != rhsComponents.0 {
+            return lhsComponents.0 < rhsComponents.0
+        }
+        if lhsComponents.1 != rhsComponents.1 {
+            return lhsComponents.1 < rhsComponents.1
+        }
+        if lhsComponents.2 != rhsComponents.2 {
+            return lhsComponents.2 < rhsComponents.2
+        }
 
         switch (lhs.prereleaseIdentifiers.isEmpty, rhs.prereleaseIdentifiers.isEmpty) {
         case (true, false): return false
@@ -155,10 +165,14 @@ extension Version: Comparable {
         }
 
         for (lhsId, rhsId) in zip(lhs.prereleaseIdentifiers, rhs.prereleaseIdentifiers) {
-            if lhsId == rhsId { continue }
+            if lhsId == rhsId {
+                continue
+            }
             switch (Int(lhsId), Int(rhsId)) {
             case let (lhsInt?, rhsInt?):
-                if lhsInt != rhsInt { return lhsInt < rhsInt }
+                if lhsInt != rhsInt {
+                    return lhsInt < rhsInt
+                }
                 return lhsId < rhsId
             case (nil, _?): return false
             case (_?, nil): return true
@@ -208,7 +222,7 @@ public extension Version {
 
 // MARK: - Range extensions
 
-public extension Range where Bound == Version {
+public extension Range<Version> {
     static func upToNextMajor(from version: Version) -> Range<Version> {
         version ..< Version(version.major + 1)
     }
