@@ -331,7 +331,7 @@ public extension String {
     func matches(for regex: String) -> [[String]] {
         do {
             let regEx = try NSRegularExpression(pattern: regex, options: [])
-            let matches = regEx.matches(in: self, range: NSRange(location: 0, length: count))
+            let matches = regEx.matches(in: self, range: NSRange(location: 0, length: utf16.count))
             return matches.map {
                 var array: [String] = []
                 for rangeIndex in 0 ... max(0, $0.numberOfRanges - 1) {

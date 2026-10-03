@@ -9,24 +9,16 @@ public extension URL {
     var hostWithoutSubdomain: String? {
         guard let hostName = host else { return nil }
         let subStrings = hostName.components(separatedBy: ".")
-        var domainName: String = .init()
         let count = subStrings.count
-        if count > 2 {
-            domainName = subStrings[count - 2] + "." + subStrings[count - 1]
-        } else if count == 2 {
-            domainName = hostName
-        }
-        return domainName
+        let isIPv4Address = count == 4 && subStrings.allSatisfy { !$0.isEmpty && $0.allSatisfy(\.isNumber) }
+        guard count > 2, !isIPv4Address else { return hostName }
+        return subStrings[count - 2] + "." + subStrings[count - 1]
     }
 
     var urlTitle: String {
-        if absoluteString.count < 14 {
-            return absoluteString
-        }
-        var urlString = absoluteString
-        let range = urlString.index(urlString.startIndex, offsetBy: 14) ..< urlString.endIndex
-        urlString.removeSubrange(range)
-        return urlString + "..."
+        let maximumLength = 14
+        guard absoluteString.count > maximumLength else { return absoluteString }
+        return String(absoluteString.prefix(maximumLength)) + "..."
     }
 }
 

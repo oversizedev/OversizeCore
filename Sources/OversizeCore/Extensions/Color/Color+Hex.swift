@@ -17,6 +17,11 @@ import AppKit
 /// containing red, green, blue, and alpha values as CGFloat from 0.0 to 1.0.
 public typealias ColorComponentsRGBA = (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
 
+/// Strips every non-alphanumeric character so separators like `#` or `-` are accepted anywhere.
+func hexDigits(of value: String) -> String {
+    value.components(separatedBy: CharacterSet.alphanumerics.inverted).joined()
+}
+
 // swiftlint:disable all
 
 // MARK: - Hex Color Initialization
@@ -30,7 +35,7 @@ public extension Color {
     /// - 8-character ARGB (e.g., "80FF00AA" with alpha)
     ///
     /// The initializer automatically strips non-alphanumeric characters,
-    /// so formats like "#FF00AA", "0xFF00AA", or "FF-00-AA" are all valid.
+    /// so formats like "#FF00AA" or "FF-00-AA" are both valid.
     ///
     /// - Parameter hex: The hexadecimal color string
     ///
@@ -42,9 +47,9 @@ public extension Color {
     /// let transparent = Color(hex: "80FF0000") // Semi-transparent red
     /// ```
     ///
-    /// - Note: Invalid hex strings default to black with zero opacity.
+    /// - Note: Invalid hex strings default to opaque black.
     init(hex: String) {
-        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        let hex = hexDigits(of: hex)
         var int: UInt64 = 0
         Scanner(string: hex).scanHexInt64(&int)
         let a, r, g, b: UInt64
@@ -56,7 +61,7 @@ public extension Color {
         case 8: // ARGB (32-bit)
             (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
         default:
-            (a, r, g, b) = (1, 1, 1, 0)
+            (a, r, g, b) = (255, 0, 0, 0)
         }
 
         self.init(
@@ -85,32 +90,11 @@ public extension Color {
     /// let defaultColor = Color(hex: nilColor) // Black color
     /// ```
     init(hex: String?) {
-        if let hex {
-            let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-            var int: UInt64 = 0
-            Scanner(string: hex).scanHexInt64(&int)
-            let a, r, g, b: UInt64
-            switch hex.count {
-            case 3: // RGB (12-bit)
-                (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-            case 6: // RGB (24-bit)
-                (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
-            case 8: // ARGB (32-bit)
-                (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
-            default:
-                (a, r, g, b) = (1, 1, 1, 0)
-            }
-
-            self.init(
-                .sRGB,
-                red: Double(r) / 255,
-                green: Double(g) / 255,
-                blue: Double(b) / 255,
-                opacity: Double(a) / 255,
-            )
-        } else {
-            self.init(red: 0, green: 0, blue: 0)
+        guard let hex else {
+            self.init(.sRGB, red: 0, green: 0, blue: 0, opacity: 1)
+            return
         }
+        self.init(hex: hex)
     }
 }
 
@@ -120,18 +104,18 @@ public extension Color {
     /// Converts the color to its hexadecimal string representation.
     ///
     /// This function generates a hex string from the color, automatically choosing
-    /// between 6-character RGB format (when alpha is 1.0) or 8-character RGBA format
-    /// (when alpha is not 1.0).
+    /// between 6-character RGB format (when alpha is 1.0) or 8-character ARGB format
+    /// (when alpha is not 1.0), matching the format `init(hex:)` parses.
     ///
     /// - Returns: A hex string representation of the color with # prefix
     ///
     /// Example:
     /// ```swift
     /// let red = Color.red
-    /// let hex = red.hexString() // "#FF0000"
+    /// let hex = red.hexString() // "#ff0000"
     ///
     /// let transparentBlue = Color.blue.opacity(0.5)
-    /// let hexWithAlpha = transparentBlue.hexString() // "#0000FF80"
+    /// let hexWithAlpha = transparentBlue.hexString() // "#800000ff"
     /// ```
     func hexString() -> String {
         hexStringFromColorComponents(rgba)
@@ -151,15 +135,23 @@ public extension Color {
     /// print("Red: \(components.red), Alpha: \(components.alpha)")
     /// ```
     var rgba: ColorComponentsRGBA {
-        #if canImport(AppKit)
-        let color = NSColor(self).usingColorSpace(.displayP3)!
-        #elseif canImport(UIKit)
-        let color: UIColor = .init(self)
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+
+        #if canImport(UIKit)
+        guard UIColor(self).getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
+            return (0, 0, 0, 0)
+        }
+        #elseif canImport(AppKit)
+        guard let color = NSColor(self).usingColorSpace(.sRGB) else {
+            return (0, 0, 0, 0)
+        }
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         #endif
 
-        var t = (CGFloat(), CGFloat(), CGFloat(), CGFloat())
-        color.getRed(&t.0, green: &t.1, blue: &t.2, alpha: &t.3)
-        return t
+        return (red, green, blue, alpha)
     }
 }
 
@@ -169,49 +161,44 @@ public extension Color {
 ///
 /// This function creates a hex string from RGBA color components, automatically
 /// choosing the appropriate format based on the alpha value. If alpha is 1.0,
-/// it returns a 6-character RGB hex string, otherwise an 8-character RGBA hex string.
+/// it returns a 6-character RGB hex string, otherwise an 8-character ARGB hex string
+/// in the same layout `Color.init(hex:)` parses.
 ///
 /// - Parameter components: The RGBA color components tuple
-/// - Returns: A hex string with # prefix in RGB or RGBA format
+/// - Returns: A hex string with # prefix in RGB or ARGB format
 ///
 /// Example:
 /// ```swift
 /// let components: ColorComponentsRGBA = (red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
-/// let hex = hexStringFromColorComponents(components) // "#FF0000"
+/// let hex = hexStringFromColorComponents(components) // "#ff0000"
 /// ```
 public func hexStringFromColorComponents(_ components: ColorComponentsRGBA) -> String {
-    // print("hexStringFromColorComponents → \(components)")
-
     if components.alpha == 1.0 {
-        // Color is in hex format without alpha
-        let rgb: Int = hexIntFromColorComponents(rgb: components)
-        // print("hexString rgb → \(rgb)")
-
-        return String(format: "#%06x", rgb)
+        String(format: "#%06x", hexIntFromColorComponents(rgb: components))
     } else {
-        // Color is in hex format with alpha
-        let rgba: Int = hexIntFromColorComponents(rgba: components)
-        // print("hexString rgba → \(rgba)")
-
-        return String(format: "#%08x", rgba)
+        String(format: "#%08x", hexIntFromColorComponents(argb: components))
     }
 }
 
-private func hexIntFromColorComponents(rgb components: ColorComponentsRGBA) -> Int {
-    let (r, g, b, _) = components
-    return Int(r * 255) << 16 | Int(g * 255) << 8 | Int(b * 255) << 0
+private func hexChannel(_ value: CGFloat) -> Int {
+    Int((Swift.min(Swift.max(value, 0), 1) * 255).rounded())
 }
 
-private func hexIntFromColorComponents(rgba components: ColorComponentsRGBA) -> Int {
-    let (r, g, b, a) = components
-    return Int(r * 255) << 24 | Int(g * 255) << 16 | Int(b * 255) << 8 | Int(a * 255) << 0
+private func hexIntFromColorComponents(rgb components: ColorComponentsRGBA) -> Int {
+    let (red, green, blue, _) = components
+    return hexChannel(red) << 16 | hexChannel(green) << 8 | hexChannel(blue)
+}
+
+private func hexIntFromColorComponents(argb components: ColorComponentsRGBA) -> Int {
+    let (red, green, blue, alpha) = components
+    return hexChannel(alpha) << 24 | hexChannel(red) << 16 | hexChannel(green) << 8 | hexChannel(blue)
 }
 
 // MARK: - ExpressibleByStringLiteral
 
 extension Color: @retroactive ExpressibleByStringLiteral {
     public init(stringLiteral value: String) {
-        let clean = value.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        let clean = hexDigits(of: value)
         self = [3, 6, 8].contains(clean.count) ? Color(hex: value) : .black
     }
 }

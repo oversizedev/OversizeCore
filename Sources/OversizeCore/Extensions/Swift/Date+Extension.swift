@@ -153,7 +153,8 @@ extension Date: @retroactive RawRepresentable {
 
     public init?(rawValue: String) {
         let formatter = ISO8601DateFormatter()
-        self = formatter.date(from: rawValue) ?? Date()
+        guard let date = formatter.date(from: rawValue) else { return nil }
+        self = date
     }
 }
 

@@ -203,12 +203,44 @@ public extension Version {
         (patch ?? 0) != 0
     }
 
-    func nextMajor() -> Version {
-        Version(major + 1, 0)
+    /// Returns the next major version, resetting the lower components.
+    ///
+    /// Prerelease and build metadata identifiers are dropped, as required by SemVer.
+    /// The `style` controls whether the result carries a zeroed patch component.
+    ///
+    /// - Parameter style: The output shape of the incremented version. Defaults to ``VersionBumpStyle/short``.
+    /// - Returns: A version with `major` increased by one and the remaining components reset.
+    ///
+    /// Example:
+    /// ```swift
+    /// Version("2.0.1")!.nextMajor().description       // "3.0"
+    /// Version("2.0.1")!.nextMajor(.full).description  // "3.0.0"
+    /// ```
+    func nextMajor(_ style: VersionBumpStyle = .short) -> Version {
+        switch style {
+        case .short: Version(major + 1, 0)
+        case .full: Version(major + 1, 0, 0)
+        }
     }
 
-    func nextMinor() -> Version {
-        Version(major, (minor ?? 0) + 1)
+    /// Returns the next minor version, resetting the patch component.
+    ///
+    /// Prerelease and build metadata identifiers are dropped, as required by SemVer.
+    /// A version without a minor component is treated as having a minor of zero.
+    ///
+    /// - Parameter style: The output shape of the incremented version. Defaults to ``VersionBumpStyle/short``.
+    /// - Returns: A version with `minor` increased by one and the patch component reset.
+    ///
+    /// Example:
+    /// ```swift
+    /// Version("2.0.1")!.nextMinor().description       // "2.1"
+    /// Version("2.0.1")!.nextMinor(.full).description  // "2.1.0"
+    /// ```
+    func nextMinor(_ style: VersionBumpStyle = .short) -> Version {
+        switch style {
+        case .short: Version(major, (minor ?? 0) + 1)
+        case .full: Version(major, (minor ?? 0) + 1, 0)
+        }
     }
 
     func nextPatch() -> Version {

@@ -79,41 +79,39 @@ struct VersionParsingTests {
         #expect(version.buildMetadataIdentifiers == ["sha", "001"])
     }
 
-    // Failable init tests — use String variables to bypass ExpressibleByStringLiteral
-
     @Test func nonNumericString_returnsNil() {
-        let str = "abc"
-        #expect(Version(str) == nil)
+        let rawValue = "abc"
+        #expect(Version(rawValue) == nil)
     }
 
     @Test func emptyString_returnsNil() {
-        let str = ""
-        #expect(Version(str) == nil)
+        let rawValue = ""
+        #expect(Version(rawValue) == nil)
     }
 
     @Test func fourComponentString_returnsNil() {
-        let str = "1.2.3.4"
-        #expect(Version(str) == nil)
+        let rawValue = "1.2.3.4"
+        #expect(Version(rawValue) == nil)
     }
 
     @Test func negativeMajor_returnsNil() {
-        let str = "-1.0.0"
-        #expect(Version(str) == nil)
+        let rawValue = "-1.0.0"
+        #expect(Version(rawValue) == nil)
     }
 
     @Test func emptyPrereleaseSection_returnsNil() {
-        let str = "1.2.3-"
-        #expect(Version(str) == nil)
+        let rawValue = "1.2.3-"
+        #expect(Version(rawValue) == nil)
     }
 
     @Test func emptyBuildMetadataSection_returnsNil() {
-        let str = "1.2.3+"
-        #expect(Version(str) == nil)
+        let rawValue = "1.2.3+"
+        #expect(Version(rawValue) == nil)
     }
 
     @Test func doubleDotInPrerelease_returnsNil() {
-        let str = "1.2.3-alpha..1"
-        #expect(Version(str) == nil)
+        let rawValue = "1.2.3-alpha..1"
+        #expect(Version(rawValue) == nil)
     }
 }
 
@@ -163,9 +161,9 @@ struct VersionHashableTests {
     }
 
     @Test func buildMetadata_doesNotAffectHash() {
-        let v1 = Version(1, 0, 0, buildMetadataIdentifiers: ["abc"])
-        let v2 = Version(1, 0, 0, buildMetadataIdentifiers: ["xyz"])
-        #expect(v1.hashValue == v2.hashValue)
+        let first = Version(1, 0, 0, buildMetadataIdentifiers: ["abc"])
+        let second = Version(1, 0, 0, buildMetadataIdentifiers: ["xyz"])
+        #expect(first.hashValue == second.hashValue)
     }
 
     @Test func differentPrerelease_notDedupedInSet() {
@@ -247,26 +245,26 @@ struct VersionComparableTests {
     }
 
     @Test func numericIdentifierComparedNumerically() throws {
-        let s2 = "1.0.0-beta.2"
-        let s11 = "1.0.0-beta.11"
-        let v2 = try #require(Version(s2))
-        let v11 = try #require(Version(s11))
-        #expect(v2 < v11)
+        let betaTwoString = "1.0.0-beta.2"
+        let betaElevenString = "1.0.0-beta.11"
+        let betaTwo = try #require(Version(betaTwoString))
+        let betaEleven = try #require(Version(betaElevenString))
+        #expect(betaTwo < betaEleven)
     }
 
     @Test func numericIdentifierLessThanAlphanumeric() throws {
-        let sNumeric = "1.0.0-1"
-        let sAlpha = "1.0.0-alpha"
-        let numeric = try #require(Version(sNumeric))
-        let alpha = try #require(Version(sAlpha))
+        let numericString = "1.0.0-1"
+        let alphaString = "1.0.0-alpha"
+        let numeric = try #require(Version(numericString))
+        let alpha = try #require(Version(alphaString))
         #expect(numeric < alpha)
     }
 
     @Test func sameIntValueDifferentString_orderedByString() {
-        let v01 = Version(1, 0, 0, prereleaseIdentifiers: ["01"])
-        let v1 = Version(1, 0, 0, prereleaseIdentifiers: ["1"])
-        #expect(v01 != v1)
-        #expect(v01 < v1)
+        let zeroPadded = Version(1, 0, 0, prereleaseIdentifiers: ["01"])
+        let plain = Version(1, 0, 0, prereleaseIdentifiers: ["1"])
+        #expect(zeroPadded != plain)
+        #expect(zeroPadded < plain)
     }
 }
 
@@ -285,16 +283,35 @@ struct VersionHelperTests {
         #expect(!Version(2).isFirstVersion)
     }
 
+    @Test func isFirstVersion_version101_returnsFalse() {
+        #expect(!Version(1, 0, 1).isFirstVersion)
+    }
+
     @Test func isMajor_zeroMinorAndPatch_returnsTrue() {
         #expect(Version(2, 0).isMajor)
+    }
+
+    @Test(arguments: [Version(2, 1), Version(2, 0, 1)])
+    func isMajor_nonZeroMinorOrPatch_returnsFalse(_ version: Version) {
+        #expect(!version.isMajor)
     }
 
     @Test func isMinor_nonZeroMinor_returnsTrue() {
         #expect(Version(1, 1).isMinor)
     }
 
+    @Test(arguments: [Version(1, 0), Version(1, 1, 1)])
+    func isMinor_zeroMinorOrNonZeroPatch_returnsFalse(_ version: Version) {
+        #expect(!version.isMinor)
+    }
+
     @Test func isPatch_nonZeroPatch_returnsTrue() {
         #expect(Version(1, 0, 1).isPatch)
+    }
+
+    @Test(arguments: [Version(1), Version(1, 1), Version(1, 1, 0)])
+    func isPatch_zeroOrMissingPatch_returnsFalse(_ version: Version) {
+        #expect(!version.isPatch)
     }
 }
 
@@ -318,8 +335,17 @@ struct VersionIncrementTests {
     }
 
     @Test func nextPatch_fromPrerelease_appendsZeroIdentifier() {
-        let v = Version(1, 0, 0, prereleaseIdentifiers: ["beta", "1"])
-        #expect(v.nextPatch().description == "1.0.0-beta.1.0")
+        let version = Version(1, 0, 0, prereleaseIdentifiers: ["beta", "1"])
+        #expect(version.nextPatch().description == "1.0.0-beta.1.0")
+    }
+
+    @Test func nextMinor_fromMajorOnly_fullStyle_returnsFullVersion() {
+        #expect(Version(2).nextMinor(.full).description == "2.1.0")
+    }
+
+    @Test func nextMajor_fromPrerelease_dropsIdentifiers() {
+        let version = Version(1, 2, 3, prereleaseIdentifiers: ["beta"])
+        #expect(version.nextMajor(.full).description == "2.0.0")
     }
 }
 
