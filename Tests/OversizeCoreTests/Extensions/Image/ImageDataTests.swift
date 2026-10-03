@@ -32,36 +32,36 @@ struct ImageDataTests {
 #if canImport(AppKit) && !canImport(UIKit)
 struct NSImageExtensionTests {
     @Test func pngData_returnsNonEmptyData() throws {
-        let data = try #require(TestImage.make().pngData())
+        let data = try #require(TestImage.make()?.pngData())
         #expect(!data.isEmpty)
     }
 
     @Test func jpegData_returnsNonEmptyData() throws {
-        let data = try #require(TestImage.make().jpegData())
+        let data = try #require(TestImage.make()?.jpegData())
         #expect(!data.isEmpty)
     }
 
     @Test func jpegDataWithCompressionQuality_honoursQuality() throws {
-        let image = TestImage.make()
+        let image = try #require(TestImage.make())
         let low = try #require(image.jpegData(compressionQuality: 0.1))
         let high = try #require(image.jpegData(compressionQuality: 1.0))
         #expect(low.count < high.count)
     }
 
-    @Test func cgImage_isNotNil() {
-        #expect(TestImage.make().cgImage != nil)
+    @Test func cgImage_isNotNil() throws {
+        #expect(try #require(TestImage.make()).cgImage != nil)
     }
 
-    @Test func averageColor_returnsColorForSolidImage() {
-        #expect(TestImage.make().averageColor != nil)
+    @Test func averageColor_returnsColorForSolidImage() throws {
+        #expect(try #require(TestImage.make()).averageColor != nil)
     }
 }
 #endif
 
 #if canImport(UIKit) && !os(watchOS)
 struct UIImageExtensionTests {
-    @Test func averageColor_returnsColorForSolidImage() {
-        #expect(TestImage.make().averageColor != nil)
+    @Test func averageColor_returnsColorForSolidImage() throws {
+        #expect(try #require(TestImage.make()).averageColor != nil)
     }
 }
 #endif

@@ -145,9 +145,8 @@ struct CustomErrorTests {
 
 // MARK: - Deprecated aliases
 
-/// Two deprecation warnings are expected here: `FileSyncError` is deprecated but still
-/// shipping, and its delegation logic is worth covering until it is removed.
 struct DeprecatedErrorTests {
+    @available(*, deprecated)
     @Test func fileSyncError_delegatesToFileError() {
         let error = FileSyncError.file(.saveFailed)
         #expect(error.errorDescription == FileError.saveFailed.errorDescription)
@@ -155,6 +154,7 @@ struct DeprecatedErrorTests {
         #expect(error.recoverySuggestion == FileError.saveFailed.recoverySuggestion)
     }
 
+    @available(*, deprecated)
     @Test func fileSyncError_delegatesToCloudError() {
         let error = FileSyncError.cloud(.quotaExceeded)
         #expect(error.errorDescription == CloudError.quotaExceeded.errorDescription)

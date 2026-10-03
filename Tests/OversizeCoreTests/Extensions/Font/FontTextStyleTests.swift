@@ -28,8 +28,8 @@ struct FontTextStyleTests {
         #expect(style.displayName == expected)
     }
 
-    @Test func displayName_isUniquePerStyle() {
-        let names = Self.styles.map(\.1)
+    @Test func displayName_isUniqueForEveryCase() {
+        let names = Font.TextStyle.allCases.map(\.displayName)
         #expect(Set(names).count == names.count)
     }
 }

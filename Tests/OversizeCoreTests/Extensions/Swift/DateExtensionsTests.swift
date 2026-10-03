@@ -17,6 +17,10 @@ private func monthDelta(from start: Date, to end: Date) -> Int {
     Calendar.current.dateComponents([.month], from: start, to: end).month ?? 0
 }
 
+private func yearDelta(from start: Date, to end: Date) -> Int {
+    Calendar.current.dateComponents([.year], from: start, to: end).year ?? 0
+}
+
 // MARK: - Offsets
 
 struct DateOffsetTests {
@@ -53,11 +57,11 @@ struct DateOffsetTests {
     }
 
     @Test func year_movesOneYearForward() {
-        #expect(referenceDate.year.years(from: referenceDate) == 1)
+        #expect(yearDelta(from: referenceDate, to: referenceDate.year) == 1)
     }
 
     @Test func yearBefore_movesOneYearBack() {
-        #expect(referenceDate.yearBefore.years(from: referenceDate) == -1)
+        #expect(yearDelta(from: referenceDate, to: referenceDate.yearBefore) == -1)
     }
 
     @Test func hour_addsOneHour() {

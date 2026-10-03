@@ -77,7 +77,14 @@ struct AttributedStringArchivingTests {
 
         let data = try #require(original.encode())
         let decoded = AttributedString.decode(from: data)
-        #expect(String(decoded.characters) == "RedPlain")
+        let runs = decoded.runs.map { run in
+            (text: String(decoded[run.range].characters), isColored: run.foregroundColor != nil)
+        }
+        #expect(runs.count == 2)
+        #expect(runs.first?.text == "Red")
+        #expect(runs.first?.isColored == true)
+        #expect(runs.last?.text == "Plain")
+        #expect(runs.last?.isColored == false)
     }
 
     @Test func decode_withInvalidData_returnsEmptyString() {

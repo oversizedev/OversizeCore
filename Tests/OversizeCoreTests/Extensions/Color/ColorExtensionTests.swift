@@ -57,16 +57,16 @@ struct ColorAdjustmentTests {
 
     @Test func adjust_clampsToUpperBound() {
         let components = gray.adjust(by: 200).components
-        #expect(components.red <= 1)
-        #expect(components.green <= 1)
-        #expect(components.blue <= 1)
+        #expect(abs(components.red - 1) < 0.01)
+        #expect(abs(components.green - 1) < 0.01)
+        #expect(abs(components.blue - 1) < 0.01)
     }
 
     @Test func adjust_clampsToLowerBound() {
         let components = gray.adjust(by: -200).components
-        #expect(components.red >= 0)
-        #expect(components.green >= 0)
-        #expect(components.blue >= 0)
+        #expect(components.red < 0.01)
+        #expect(components.green < 0.01)
+        #expect(components.blue < 0.01)
     }
 
     @Test func adjust_preservesOpacity() {

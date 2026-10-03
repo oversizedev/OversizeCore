@@ -96,11 +96,14 @@ struct StringConversionTests {
         #expect("😀".range == NSRange(location: 0, length: 2))
     }
 
+    @Test func localizedDecimalSeparator_normalizesBothSeparators() {
+        #expect("1.5".localizedDecimalSeparator == "1,5".localizedDecimalSeparator)
+    }
+
     @Test(arguments: ["1.5", "1,5"])
-    func localizedDecimalSeparator_usesCurrentLocaleSeparator(_ value: String) {
-        let separator = NumberFormatter().decimalSeparator ?? "."
-        let expected = separator == "," ? "1,5" : "1.5"
-        #expect(value.localizedDecimalSeparator == expected)
+    func localizedDecimalSeparator_producesParsableNumber(_ value: String) throws {
+        let number = try #require(NumberFormatter().number(from: value.localizedDecimalSeparator))
+        #expect(number.doubleValue == 1.5)
     }
 
     @Test func toDate_withFullDate_parsesDate() throws {

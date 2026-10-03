@@ -72,8 +72,6 @@ struct ColorDataSemanticColorTests {
         #expect(green != blue)
     }
 
-    /// `.primary` is a dynamic/system color. `EnvironmentValues()` defaults to the
-    /// light appearance, where `.primary` resolves near-black rather than white.
     @Test func primaryColor_resolvesNearBlackInDefaultEnvironment() throws {
         let components = try storedComponents(ColorData(color: .primary))
         #expect(components.red < 0.2)
